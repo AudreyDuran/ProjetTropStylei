@@ -14,13 +14,18 @@ class protein:
 
 	def detection(self, a):
 
-		d = (self.x-a.x)**2 + (self.y - a.y)**2
+		d = math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
 
 		if d <= self.rayon:
 			return True
 
 		else:
 			return False
+
+
+	def vitesse(self):
+
+		pass
 
 
 p = protein(200)

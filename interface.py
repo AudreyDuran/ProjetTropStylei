@@ -1,0 +1,86 @@
+import wx
+import math
+import numpy as np
+import random
+
+
+class MyFrame(wx.Frame):
+    def __init__(self, parent, ID, title,pos,size):
+        wx.Frame.__init__(self, parent, ID, title,pos,size)
+        self.SetAutoLayout (True)
+
+
+
+        # Check box
+        self.cb = wx.CheckBox(self,-1, 'venin', (200,200))
+        self.Bind(wx.EVT_CHECKBOX, self.imprimer , self.cb)
+        
+        # # Text
+        # tx = wx.TextCtrl( self, -1, 'text', (100,0))
+        # self.Bind(wx.EVT_CHECKBOX, self.imprimer_b1 , self.cb)
+
+        self.boutton = []
+        self.texte = []
+        self.compteur = 0
+        self.compteur1 = 0
+
+
+
+
+    # Bouton
+	def bouton(self, label):
+		for i,v in enumerate(label):
+			b = wx.Button(self, i, v, (0, i*35), (80, 33))
+			self.boutton.append(b)
+
+	def bind_bouton(self, fonction):
+		for i,v in enumerate(self.boutton):
+			self.Bind(wx.EVT_BUTTON, fonction[i], v)
+
+
+
+
+   	# Texte
+	def text(self, label):
+		for i,v in enumerate(label):
+			txt = wx.TextCtrl( self, i, v, (90, i*35))
+			self.texte.append(txt)
+
+	def bind_texte(self, fonction):
+		for i,v in enumerate(self.texte):
+			self.Bind(wx.EVT_TEXT_ENTER, fonction[i], v)
+
+
+
+    # fonction
+	def imprimer(self,event):
+		self.compteur += 1
+		print self.compteur
+
+
+
+class MyApp(wx.App):
+	def OnInit(self):
+		frame = MyFrame(None, -1, "coagulation",(40,40),(400,400))
+
+		label = ['1', '2', '3', '4']
+		bind = [frame.imprimer for i in xrange(1,4)]
+
+
+        # bouton
+		frame.bouton(label)
+		frame.bind_bouton(bind)
+
+
+        # texte
+		frame.text(label)
+		frame.bind_texte(bind)
+
+		frame.Show(True)
+		self.SetTopWindow(frame)
+		return True
+
+
+app = MyApp(0)
+
+app.MainLoop()
