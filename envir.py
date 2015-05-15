@@ -3,13 +3,18 @@ import math
 import random
 
 class envir:
-    def __init__(self, taille_trou, diametre):
+    def __init__(self, taille_trou, diametre, position_trou, debut, fin):
     	self.taille_trou = taille_trou
     	self.diametre = diametre
 
-    	self.paroi_basse = [[diametre, 100], [diametre, 200], [diametre, 200+taille_trou], [diametre, 10000]]
+    	self.debut = debut
+    	self.fin = fin
 
-    	self.trou = [[diametre,200], [diametre,200+taille_trou]]
+    	self.position_trou = position_trou
+
+    	self.paroi_basse = [[diametre, debut], [diametre, position_trou], [diametre, position_trou+taille_trou], [diametre, fin]]
+
+    	self.trou = [[diametre,position_trou], [diametre,position_trou+taille_trou]]
 
     	self.compteur = 0
 
