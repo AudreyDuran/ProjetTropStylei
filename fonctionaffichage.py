@@ -21,6 +21,7 @@ class protein():#proteine type
 #Plein, comme inactive, vide comme active.
 #Ce que je propose, on a 3 types de proteines: activee, inactivee et "detruit" par le venim
 #Pour "detruit", on utilise cet attribut fonction. S'il devient zero, la proteine est toujours inactive.
+#Le venim changerait l'attribut fonction
 
 once=0
 def deactivate(t,listp,once):	# deactive toutes les proteines(comme un venim) apres 5 seconds
