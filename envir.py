@@ -24,6 +24,7 @@ class envir:
     	self.compteur = 0
 
         self.protPermanentes=[]
+
         self.protTotales=[]
 
         self.dicoRel={}
@@ -35,7 +36,9 @@ class envir:
         self.dicoRel['VIIa-TF']=('X','Xa')
 
         self.dicoRel['prothrombine']=('Xa','thrombine')
-        self.dicoRel['Xa']=(('prothrombine','thrombine'),('V','Va'))
+        #Xa + prothrombine = thrombine
+        #Xa + V = Va
+        self.dicoRel['Xa']=(('prothrombine','V'),('thrombine','Va'))
         self.dicoRel['V']=('Xa','Va')
 
         self.dicoRel['fibrinogene']=('thrombine','fibrine')
@@ -45,7 +48,27 @@ class envir:
         self.dicoRel['XIIIa']=('fibrine','fibrinclot')
         self.dicoRel['fibrine']=('XIIIa','fibrinclot')
 
+        #METTRE LE NOM DES LISTES A LA PLACE DES NOMS DE PROT DANS LE DICO
+
         self.venin=""
+        self.vitesse_lim=20
+
+
+    #calcule la nouvelle position de toutes les proteines
+    def moveAll(self):
+        for l in self.protTotales: #on parcourt chaque liste de prot
+            for i in xrange(len(l)): #on regarde chaque prot de cette liste
+
+                if len(self.dicoRel[l[i][0]])==1: #si peut reagir qu'avec une proteine
+
+                    if l[i].detection(self.dicoRel[l[i][0]])== False:  #si detecte pas de la prot avec qui peut reagir
+                        l[i].move(self.compteur, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre)
+
+                    else: #si detecte une prot avec qui reagit
+                        l[i].activation=True
+                        #comment activer la prot aussi
+
+
 
 
 
@@ -56,5 +79,5 @@ class envir:
 
 
 e=envir(20,40,80,0,100)
-#e.dicoRel['Xa'][0]=0
-print e.dicoRel['Xa'][1]
+print e.dicoRel['Xa'][0]
+print len(e.dicoRel['Xa'][0])

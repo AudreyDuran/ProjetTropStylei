@@ -18,6 +18,7 @@ class protein:
 		d = math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
 
 		if d <= self.rayon:
+			a.activation=True
 			return True
 
 		else:
