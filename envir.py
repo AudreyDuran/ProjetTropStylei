@@ -9,6 +9,8 @@ class envir:
     #diametre : diametre du vaisseau (longueur en y)
     #debut: indice x de debut du vaisseau (par rapport a la fenetre)
     #fin: indice x de fin du vaisseau (y-x=longueur du vaisseau)
+    #protPermanentes : liste des prot seront dans le sang a chaque essai et seront affichees
+    #protTotales : liste de ttes  les proteines dans le sang
 
     def __init__(self, taille_trou, position_trou, diametre, debut, fin):
     	self.taille_trou = taille_trou
@@ -20,8 +22,21 @@ class envir:
 
     	self.compteur = 0
 
+        self.protPermanentes=[]
+        self.protTotales=[]
+        self.dicoRel={}
 
-a = envir(50,500)
-print a.paroi_basse
-a.update_paroi(100+a.diametre-1, 199, 30)
-print a.paroi_basse
+        self.dicoRel['fVIIa']=('TF')
+        self.dicoRel['TF']=('fVIIa')
+        self.dicoRel['X']=('VIIa-TF')
+
+
+
+
+
+    def run(self):
+        a=0
+
+
+
+
