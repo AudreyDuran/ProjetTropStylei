@@ -17,7 +17,7 @@ class envir:
     #fin: indice x de fin du vaisseau (y-x=longueur du vaisseau)
     #protPermanentes : liste des prot seront dans le sang a chaque essai et seront affichees
     #protTotales : liste de ttes  les proteines dans le sang
-    #dicoRel : contient pour chaque prot ( avec cb de prot reagit, (affinite,devient),(inhibe) )
+    #dicoRel : contient pour chaque prot ( avec cb de prot reagit, (affinite,devient),(inhibe), 'c' si forme cplexe 'p' si prot)
     #dicoProt : dico contient toutes les proteines (avec en cle leur nom en string)
 
     def __init__(self, taille_trou, position_trou, diametre, debut, fin):
@@ -52,17 +52,17 @@ class envir:
 
         self.dicoRel={}
 
-        self.dicoRel['fVIIa']=(1,'TF','VIIa-TF')
-        self.dicoRel['TF']=(1,'fVIIa','VIIa-TF')
-        self.dicoRel['X']=(1,'VIIa-TF','Xa')
-        self.dicoRel['VIIa-TF']=(1,'X','Xa')
-        self.dicoRel['prothrombine']=(1,'Xa','thrombine')
+        self.dicoRel['fVIIa']=(1,'TF','VIIa-TF','c')
+        self.dicoRel['TF']=(1,'fVIIa','VIIa-TF','c')
+        self.dicoRel['X']=(1,'VIIa-TF','Xa','p')
+        self.dicoRel['VIIa-TF']=(1,'X','Xa','p')
+        self.dicoRel['prothrombine']=(1,'Xa','thrombine','p')
         #Xa + prothrombine = thrombine
         #Xa + V = Va
-        self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'))
-        self.dicoRel['V']=(1,'Xa','Va')
-        self.dicoRel['fibrinogene']=(1,'thrombine','fibrine')
-        self.dicoRel['thrombine']=(1,'fibrinogene','fibrine')
+        self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p')
+        self.dicoRel['V']=(1,'Xa','Va','p')
+        self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p')
+        self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p')
 
 
 
@@ -91,32 +91,39 @@ class envir:
     def moveAll(self):
         for typeProt,l in self.dicoProt.items(): #on parcourt chaque liste de prot (l=liste d'un type de prot)
 
-            if len(l)!=0: #si liste de ce type de prot n'est pas vide
-                for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
+            for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
 
-                    if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
+                if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
 
-                        if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
-                            move=True  #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
+                    if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
+                        move=True  #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
 
-                            for j in self.dicoProt[self.dicoRel[typeProt][1]]: #pour chaque prot de liste des prot avec qui peut reagir (j=type prot)
-                                if l[i].detection(j)== True:  #si detecte une des prot avec qui peut reagir
-                                    move = False
+                        for j in self.dicoProt[self.dicoRel[typeProt][1]]: #pour chaque prot de liste des prot avec qui peut reagir (j=type prot)
+                            if l[i].detection(j)== True:  #si detecte une des prot avec qui peut reagir
+                                move = False
 
-                            if move == True: #si va bouger, a rencontre aucune prot ac qui peut reagir (regarder apres fin boucle for)
-                                print typeProt
-                                l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre)
-                                print l[i].x
-                                #+ les faire se transformer !
-                        if self.dicoRel[typeProt][0]>1: #si peut reagir avec 2 types de prot
-                            move=True
+                        if move == True: #si va bouger, a rencontre aucune prot ac qui peut reagir (regarder apres fin boucle for)
 
-                            for reactif in self.dicoRel[typeProt][1]: #pour chacun des reactifs ac qui peut reagir
-                                for j in self.dicoProt[reactif]:
-                                    if l[i].detection(j)==True:
-                                        move=False
-                            if move == True:
-                                l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre)
+                            l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre)
+
+                            #+ les faire se transformer !
+                    if self.dicoRel[typeProt][0]>1: #si peut reagir avec 2 types de prot
+                        move=True
+
+                        for reactif in self.dicoRel[typeProt][1]: #pour chacun des reactifs ac qui peut reagir
+                            for j in self.dicoProt[reactif]:
+                                if l[i].detection(j)==True:
+                                    move=False
+                        if move == True:
+                            l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre)
+
+
+    #----------------------------------------------------------------------------------------------------
+    #                                      reaction
+    #----------------------------------------------------------------------------------------------------
+    def reaction(self,typeProt,prot):
+        if self.dicoRel[typeProt][3]=='p':
+            self.dicoProt[typeProt].remove(prot) #on enleve la proteine qui se transforme du tableau
 
 
 
@@ -157,3 +164,5 @@ e.moveAll()
 print 'fin : fVIIa',e.dicoProt['fVIIa']
 print 'fin : TF',e.dicoProt['TF']
 print 'fin : Xa',e.dicoProt['Xa']
+
+print e.dicoRel['TF'][3]
