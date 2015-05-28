@@ -19,6 +19,7 @@ class protein:
 
 		if d <= self.rayon:
 			a.activation=True
+			self.activation = True
 			return True
 
 		else:
@@ -73,8 +74,16 @@ class protein:
 	def __repr__(self):
 		return "(x=%lg, y=%lg, activation=%r, rayon=%lg)" %(self.x, self.y, self.activation, self.rayon)
 
+
+
+
 	def attraction(self, dt, position_trou, taille_trou, vitesse_max_flux, diametre):
-		angle = math.atan(taille_trou/diametre)
+		angle = math.cos(math.atan(taille_trou/diametre))
+		a = position_trou - taille_trou
+
+		if self.x > self.y/angle + a & self.x < self.y/angle + position_trou:
+
+
 
 		
 
@@ -83,10 +92,8 @@ class protein:
 
 
 
-p = protein(20, random.random(), random.random())
+# p = protein(20, random.random(), random.random())
 # a = protein(40, random.random(), random.random())
-
-print p
 
 # f = open("position.txt", "w")
 # for t in xrange(5000):
