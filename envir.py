@@ -4,6 +4,11 @@ import random
 
 class envir:
 
+
+    #----------------------------------------------------------------------------------------------------
+    #                                        Constructeur
+    #----------------------------------------------------------------------------------------------------
+
     #taille trou : longueur du trou
     #position_trou: position x du trou (par rapport au debut du vaisseau)
     #diametre : diametre du vaisseau (longueur en y)
@@ -12,6 +17,7 @@ class envir:
     #protPermanentes : liste des prot seront dans le sang a chaque essai et seront affichees
     #protTotales : liste de ttes  les proteines dans le sang
     #dicoRel : contient pour chaque prot ( (affinite,devient),(inhibe) )
+    #dicoProt : dico contient toutes les proteines (avec en cle leur nom en string)
 
     def __init__(self, taille_trou, position_trou, diametre, debut, fin):
     	self.taille_trou = taille_trou
@@ -23,45 +29,49 @@ class envir:
 
     	self.compteur = 0
 
+        #dans le dico aussi ? vraiment necessaire ? seront rpz les prots permanentes ?
         self.protPermanentes=[]
 
-        self.protTotales=[]
-        self.fVIIa=[]
-        self.TF=[]
-        self.X=[]
-        self.VIIa-TF=[]
-        self.prothrombine=[]
-        self.Xa=[]
-        self.V=[]
-        self.fibrinogene=[]
-        self.thrombine=[]
+        self.dicoProt={}
+
+        self.dicoProt['fVIIa']=[]
+        self.dicoProt['TF']=[]
+        self.dicoProt['X']=[]
+        #on fait une liste pour les complexes ? ou on met juste attribut active ?
+        self.dicoProt['VIIa-TF']=[]
+        self.dicoProt['prothrombine']=[]
+        self.dicoProt['Xa']=[]
+        self.dicoProt['V']=[]
+        self.dicoProt['fibrinogene']=[]
+        self.dicoProt['thrombine']=[]
+        self.dicoProt['XIIIa']=[]
+        self.dicoProt['fibrine']=[]
+
 
         self.dicoRel={}
 
         self.dicoRel['fVIIa']=('TF','VIIa-TF')
         self.dicoRel['TF']=('fVIIa','VIIa-TF')
-
         self.dicoRel['X']=('VIIa-TF','Xa')
         self.dicoRel['VIIa-TF']=('X','Xa')
-
         self.dicoRel['prothrombine']=('Xa','thrombine')
         #Xa + prothrombine = thrombine
         #Xa + V = Va
         self.dicoRel['Xa']=(('prothrombine','V'),('thrombine','Va'))
         self.dicoRel['V']=('Xa','Va')
-
         self.dicoRel['fibrinogene']=('thrombine','fibrine')
         self.dicoRel['thrombine']=('fibrinogene','fibrine')
-
         #on le met vraiment le cross linked fibrin clot ?
         self.dicoRel['XIIIa']=('fibrine','fibrinclot')
         self.dicoRel['fibrine']=('XIIIa','fibrinclot')
+
+
+
 
         #METTRE LE NOM DES LISTES A LA PLACE DES NOMS DE PROT DANS LE DICO
         #pas possible, cles peuvent pas etre des types listes.. types prot ?
 
         #pb=besoin des prot pour appeler les fonctions, donc dans le dico je dois avoir des prot... 
-        #ou un truc7
 
         #solution = un dico ou un type de facteur en cle et toutes les prot en valeur
         #du coup : plus besoin de liste des prot totales, on parcourt tout le dico
@@ -72,6 +82,9 @@ class envir:
         self.venin=""
         self.vitesse_lim=20
 
+    #----------------------------------------------------------------------------------------------------
+    #                                      moveAll
+    #----------------------------------------------------------------------------------------------------
 
     #calcule la nouvelle position de toutes les proteines
     def moveAll(self):
@@ -91,7 +104,9 @@ class envir:
 
 
 
-
+    #----------------------------------------------------------------------------------------------------
+    #                                         run
+    #----------------------------------------------------------------------------------------------------
 
     def run(self):
         a=0
