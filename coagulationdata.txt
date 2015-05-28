@@ -1,0 +1,18 @@
+Espèce		[mg/L]  X	Y	Z	site
+I		3000	49.38	66.22	50.66	http://www.rcsb.org/pdb/explore.do?structureId=3ghg
+II		100	153.34	82.31	50.93	http://www.rcsb.org/pdb/explore.do?structureId=2AFQ
+FT(III)		-	45.4	45.4	230.8	http://www.ebi.ac.uk/pdbe/entry/pdb/1boy
+IV		-	-	-	-	Calcium
+V		10	46.43	51.83	68.15	http://www.rcsb.org/pdb/explore/explore.do?structureId=1czs
+VI		-	-	-	-	Accelérine, eliminée parce qu'elle est égale à Va.
+VII		0.5	95	95	115.85	http://www.rcsb.org/pdb/explore/explore.do?structureId=1W7X
+VIII		0.1	133.84	133.84	355.81	http://www.ebi.ac.uk/pdbe/entry/pdb/4bdv
+IX		5	44.32	67.35	98.26	http://www.rcsb.org/pdb/explore/explore.do?structureId=2WPI
+X		10	56.06	72.18	79.24	http://www.rcsb.org/pdb/explore/explore.do?structureId=3IIT
+XI		5	-	-	-	-
+XII		30	-	-	-	-
+Prot. C		-	-	-	-	-	
+TF-VIIa		-	77.04	68.30	78.44	http://www.rcsb.org/pdb/explore/explore.do?structureId=1J9C
+
+
+Source de concentration: http://www.essentialhaematology6.com/tables/chapter24.pdf
