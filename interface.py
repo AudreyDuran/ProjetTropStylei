@@ -3,7 +3,7 @@ import math
 import numpy as np
 import random
 
-
+#commentaire ou truc de merde
 class MyFrame(wx.Frame):
     def __init__(self, parent, ID, title,pos,size):
         wx.Frame.__init__(self, parent, ID, title,pos,size)
