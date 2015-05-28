@@ -56,8 +56,8 @@ class protein:
 
 			# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
 			# elle sort d un certain perimetre ici on aurait un cercle de rayon 150
-			centre_trou = [position_trou+taille_trou/2, diametre]
 			if self.y > diametre:
+				centre_trou = [position_trou+taille_trou/2, diametre]
 				if math.sqrt((self.x - centre_trou[0])**2 + (self.y - centre_trou[1])**2) > math.sqrt(150):
 					self.x = debut
 					self.y = random.uniform(0, diametre)
@@ -70,6 +70,13 @@ class protein:
 			# Pour le comptage des proteine qui ne sont pas sortie du cercle
 			return 0
 
+	def __repr__(self):
+		return "(x=%lg, y=%lg, activation=%r, rayon=%lg)" %(self.x, self.y, self.activation, self.rayon)
+
+	def attraction(self, dt, position_trou, taille_trou, vitesse_max_flux, diametre):
+		angle = math.atan(taille_trou/diametre)
+
+		
 
 
 
@@ -77,20 +84,22 @@ class protein:
 
 
 p = protein(20, random.random(), random.random())
-a = protein(40, random.random(), random.random())
+# a = protein(40, random.random(), random.random())
 
-f = open("position.txt", "w")
-for t in xrange(5000):
-	p.move(0.1, 20, 10, 60, 0, 100, 100)
-	a.move(0.1, 20, 10, 60, 0, 100, 100)
+print p
 
-	f.write("%f %f %f %f\n" %(p.x, p.y, a.x, a.y))
+# f = open("position.txt", "w")
+# for t in xrange(5000):
+# 	p.move(0.1, 20, 10, 60, 0, 100, 100)
+# 	a.move(0.1, 20, 10, 60, 0, 100, 100)
 
-f.close()
+# 	f.write("%f %f %f %f\n" %(p.x, p.y, a.x, a.y))
 
-f = open("fichiergnuplot","w")
-f.write('plot \"position.txt\" using 1:2 \n')
-f.write('replot \"position.txt\" using 3:4\n')
+# f.close()
 
-f.close()
-os.system("gnuplot fichiergnuplot --persist")
+# f = open("fichiergnuplot","w")
+# f.write('plot \"position.txt\" using 1:2 \n')
+# f.write('replot \"position.txt\" using 3:4\n')
+
+# f.close()
+# os.system("gnuplot fichiergnuplot --persist")
