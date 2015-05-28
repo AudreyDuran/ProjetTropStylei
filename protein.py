@@ -35,16 +35,17 @@ class protein:
 
 			# Pour eviter qu elle sorte du vaiseau par le haut
 			if self.y < 0 :
-				self.y = 0
+				self.y = 0.
 
 			# Pour eviter qu elle sorte par le cote gauche
 			if self.x < 0:
-				self.x = 0
+				self.x = 0.
 
 			# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou
 			if self.y > diametre:
-				if self.x < position_trou & self.x > (position_trou+taille_trou):
-					self.y = diametre
+				if self.x < position_trou:
+					if self.x > position_trou+taille_trou:
+						self.y = diametre
 
 			# Quand elle arrivent a la fin
 			if self.x > fin :
