@@ -49,39 +49,51 @@ class protein:
 
 	# defini une vitesse supplementaire lorsque la proteine rentre dans le flux de sang qui part par la blessure
 	def attraction(self, dt, position_trou, taille_trou, vitesse_max_flux, diametre):
+
 		# definition de variable qu on utilisera plus tard
 		a = position_trou - taille_trou
-		b = position_trou+taille_trou/2
 
-		c = taille_trou*self.y/diametre  # calcul la longueur de la base du petit triangle rectangle dont le gros est forme par 
-		# le sommet du flux avec la paroi haute du vaiseau puis prolongement orthogonal sur la paroi basse
-		# et revenir sur un des bouts de la blessure (theoreme de thales)
+
+
+		# calcul la longueur de la base du petit triangle rectangle dont le gros est forme par le sommet du flux avec la paroi
+		# haute du vaiseau puis prolongement orthogonal sur la paroi basse et revenir sur un des bouts de la blessure (theoreme
+		# de thales)
+		b = taille_trou*self.y/diametre
 
 
 		# si la proteine est dans le parallelogramme defini par [debut trou, fin trou, haut du flux partant de la fin du trou,
 		# haut du flux partant du debut du trou]
-		if self.x > c + a:
-			if self.x < c + position_trou:
-				if self.y > diametre:
+		if self.x > b + a:
+			if self.x < b + position_trou:
+				# distance entre l hypothenus et la proteine en x
+				d_inter = self.x - b - a
 
-					# distance entre le milieu de la blessure et la proteine
-					d = math.sqrt((self.x-b)**2 + (self.y-diametre)**2) 
-
+				if self.y < diametre:
+					# distance entre proteine et l endroit ou elle toucherai la blessure si elle suivait la flux parallelement
+					d = math.hypot( (self.x - (position_trou + d_inter)), (self.y-diametre) )
+					print d, 1/d
 					if d >= 1:
 						# pour que la vitesse soit inversement proportionnel a d
-						self.x += dt * (b-self.x)/d * 1/d * vitesse_max_flux
-						self.y += dt * (diametre-self.y)/d * 1/d * vitesse_max_flux
+						self.x += dt * ( (position_trou+d_inter) - self.x )/d * 1/d * vitesse_max_flux
+						self.y += dt * ( diametre - self.y )/d * 1/d * vitesse_max_flux
 
-					if d>0 & d<1:
+					if d<1:
 						# pour ne pas que cela depasse la vitesse max
-						self.x += dt * (b-self.x)/d * vitesse_max_flux 
-						self.y += dt * (diametre-self.y)/d * vitesse_max_flux
+						self.x += dt * ( (position_trou+d_inter) - self.x )/d * vitesse_max_flux 
+						self.y += dt * ( diametre - self.y )/d * vitesse_max_flux
 
 
+
+
+				# quand la proteine est sortie du vaisseau
 				else:
-					# quand la proteine est sortie du vaisseau
-					self.x += dt * vitesse_max_flux
-					self.y += dt * vitesse_max_flux
+					c = taille_trou*(diametre+200)/diametre
+					d = math.hypot( (self.x - (a+c+d_inter)), (self.y - (diametre+200)) )
+					print d
+
+					self.x += dt * ( (a+c+d_inter)-self.x )/d * vitesse_max_flux 
+					self.y += dt * ( (diametre+200)-self.y )/d * vitesse_max_flux
+
 
 
 
@@ -159,7 +171,7 @@ a = protein(40, random.random(), random.random())
 
 f = open("position.txt", "w")
 for t in xrange(5000):
-	p.move(0.1, 20, 100, 60, 0, 1000, 100, 20)
+	p.move(0.1, 20, 100, 60, 0, 1000, 100, 200)
 	# a.move(0.1, 20, 10, 60, 0, 1000, 100, 20)
 
 	# f.write("%f %f %f %f\n" %(p.x, p.y, a.x, a.y))
