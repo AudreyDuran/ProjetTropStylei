@@ -168,7 +168,27 @@ class envir:
     #----------------------------------------------------------------------------------------------------
 
     def run(self):
-        a=0
+
+        #creation de la premiere fenetre (Thiago ?)
+        #recuperer la case cochee par l'utilisateur (parse event en c++)
+        #creer toutes les proteines qu'il faut (de base mettre des attributs de classe avec la compo de chaque venin?)
+
+        continu = True
+        #boucle infinie
+        while continu==True:
+            #on actualise fenetre en la redessinant vide (rect blanc ac la breche)
+            for typeProt,l in self.dicoProt.items(): #on parcourt toutes les prot
+                #on dessine chaque prot selon le type de prot
+                #-> faire un dico ou couleur de chaque type de prot ecrit?
+                a=0
+            self.moveAll() #on fait bouger toutes les prot
+
+            continu = False #temporaire, juste mis pour pas que boucle infinie
+
+        #+q : quand est ce qu'on arrete le programme ?
+
+
+
 
 
 
@@ -199,3 +219,5 @@ print 'fin : Xa',e.dicoProt['Xa']
 print e.dicoProt['fVIIa']
 print e.dicoProt['TF']
 print e.dicoProt[e.dicoRel['TF'][1]]
+
+e.run()
