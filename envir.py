@@ -101,18 +101,23 @@ class envir:
                 if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
                     move = True #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
                     prot = 0 #proteine avec qui va reagir 
+                    distance = self.fin*self.diametre  #distance entre les 2 prot initialisee tres grande
 
                     if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
                         for j in self.dicoProt[self.dicoRel[typeProt][1]]: #pour chaque prot de liste des prot avec qui peut reagir (j=type prot)
                             if l[i].detection(j)== True:  #si detecte une des prot avec qui peut reagir
-                                move = False
-                                prot=j
+                                if l[i].distance(j)<distance: #pour que reagisse seulement avec la prot la plus proche
+                                    move = False
+                                    prot=j
+                                    distance=l[i].distance(j)
 
                         if move == True: #si va bouger, a rencontre aucune prot ac qui peut reagir (regarder apres fin boucle for)
 
                             l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
                         if move == False: #si a rencontre une prot donc va reagir
+                            l[i].activation=True #on active les 2 prot
+                            prot.activation=True
                             self.reaction(typeProt,l[i],prot)  
 
 
@@ -120,12 +125,16 @@ class envir:
                         for reactif in self.dicoRel[typeProt][1]: #pour chacun des reactifs ac qui peut reagir
                             for j in self.dicoProt[reactif]:
                                 if l[i].detection(j)==True:
-                                    move=False
-                                    prot=j
+                                    if l[i].distance(j)<distance:
+                                        move=False
+                                        prot=j
+                                        distance=l[i].distance(j)
                         if move == True:
                             l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux)
                         
                         if move == False:
+                            l[i].activation=True #on active les 2 prot
+                            prot.activation=True
                             self.reaction(typeProt,l[i],prot)
 
 
