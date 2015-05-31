@@ -26,10 +26,10 @@ class protein:
 
 
 
-
+	#renvoie true si la prot peut detecter la prot a, false sinon 
 	def detection(self, a):
 
-		d = math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
+		d = distance(self,a)
 
 		if d <= self.rayon:
 			a.activation=True
@@ -40,6 +40,9 @@ class protein:
 			return False
 
 
+	#renvoie la distance entre deux proteines
+	def distance(sef,a):
+		return math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
 
 
 
