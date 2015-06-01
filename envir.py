@@ -175,8 +175,23 @@ class envir:
         self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
             
+    #----------------------------------------------------------------------------------------------------
+    #                                         prot
+    #----------------------------------------------------------------------------------------------------
 
-    #methode cree prot def prot(self,fact1,fact2)..
+    #cree le nombre de proteines indique pour chaque type de proteine
+
+    def prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquettes):
+
+        l=[fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquettes] #10 elements dans la liste
+
+        for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
+            for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
+                #on cree la prot et on l'ajoute dans la liste correspondante
+                self.dicoProt[prot].append(protein(self.dicoTaille[prot][0], random.random()*self.fin, random.random()*self.fin))
+
+
+
     #----------------------------------------------------------------------------------------------------
     #                                         run
     #----------------------------------------------------------------------------------------------------
@@ -236,3 +251,9 @@ print e.dicoProt['TF']
 print e.dicoProt[e.dicoRel['TF'][1]]
 
 e.run()
+
+#prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquettes):
+e.prot(1,2,3,4,5,6,7,8,9,10)
+
+for i in e.dicoProt.keys():
+    print len(e.dicoProt[i])
