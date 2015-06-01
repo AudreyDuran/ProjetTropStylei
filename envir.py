@@ -17,7 +17,7 @@ class envir:
     #fin: indice x de fin du vaisseau (y-x=longueur du vaisseau)
     #protPermanentes : liste des prot seront dans le sang a chaque essai et seront affichees
     #protTotales : liste de ttes  les proteines dans le sang
-    #dicoRel : contient pour chaque prot ( avec cb de prot reagit, (affinite,devient),(inhibe), 'c' si forme cplexe 'p' si forme prot)
+    #dicoRel : contient pour chaque prot ( avec cb de prot reagit, (affinite,devient), 'c' si forme cplexe 'p' si forme prot)
     #dicoProt : dico contient toutes les proteines (avec en cle leur nom en string)
 
     def __init__(self, taille_trou, position_trou, diametre, debut, fin, vitesse_max_flux):
@@ -81,6 +81,20 @@ class envir:
         self.dicoTaille['fibrine']=[10]
         self.dicoTaille['plaquettes']=[10]
 
+        #dictionnaire contient les couleurs dans lesquelles seront dessinees les proteines
+        #couleur a mettre en tuple (r,g,b)
+        self.dicoCouleur={}
+
+        self.dicoCouleur['fVIIa']=[]
+        self.dicoCouleur['TF']=[]
+        self.dicoCouleur['X']=[]
+        self.dicoCouleur['prothrombine']=[]
+        self.dicoCouleur['Xa']=[]
+        self.dicoCouleur['V']=[]
+        self.dicoCouleur['fibrinogene']=[]
+        self.dicoCouleur['thrombine']=[]
+        self.dicoCouleur['fibrine']=[]
+        self.dicoCouleur['plaquettes']=[]
 
 
 
@@ -162,7 +176,7 @@ class envir:
 
             
 
-
+    #methode cree prot def prot(self,fact1,fact2)..
     #----------------------------------------------------------------------------------------------------
     #                                         run
     #----------------------------------------------------------------------------------------------------
@@ -172,6 +186,7 @@ class envir:
         #creation de la premiere fenetre (Thiago ?)
         #recuperer la case cochee par l'utilisateur (parse event en c++)
         #creer toutes les proteines qu'il faut (de base mettre des attributs de classe avec la compo de chaque venin?)
+
 
         continu = True
         #boucle infinie
