@@ -13,7 +13,9 @@ class protein:
 
 		self.activation = False
 
-
+		# pour les plaquettes
+		self.compte = 0
+		self.tps = 0
 
 
 
@@ -43,8 +45,17 @@ class protein:
 		return math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
 
 
+	# compte le nombre de tour pour les plaquettes si elle n ont pas de fibrine pour les liees
+	def compte_temps(self, tps_lim, tps):
+		self.compte += 1
 
+		if self.compte > tps_lim:
+			self.activation=True
+			self.tps +=1
 
+			if self.tps > tsp:
+				self.compte=0
+				self.tps=0
 
 
 
