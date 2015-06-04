@@ -31,13 +31,20 @@ class protein:
 	#renvoie true si la prot peut detecter la prot a, false sinon 
 	def detection(self, a):
 
-		d = math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
-
-		if d <= self.rayon:
+		if math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2) <= self.rayon:
 			return True
 
 		else:
 			return False
+
+	# detection pour la fibrine
+	def detection_fibrine(self, a, b):
+
+		if math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2) <= self.rayon:
+			if math.sqrt((self.x-b.x)**2 + (self.y - b.y)**2) <= self.rayon:
+				return True
+
+		return False
 
 
 	#renvoie la distance entre deux proteines
