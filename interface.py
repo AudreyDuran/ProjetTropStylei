@@ -32,6 +32,9 @@ class GUI(wx.Frame):
 		if self.cb.GetValue():
 			if sum((self.V1.GetValue(),self.V2.GetValue(),self.V3.GetValue(),self.V4.GetValue()))>1:
 				self.txt=wx.StaticText(self,-1, "Choisissez juste un venin",(50,140))
+			elif sum((self.V1.GetValue(),self.V2.GetValue(),self.V3.GetValue(),self.V4.GetValue()))==0:
+				os.system("python "+"simulation.py 0")
+				self.Close()
 			else:
 				self.v=(self.V1.GetValue(),self.V2.GetValue(),self.V3.GetValue(),self.V4.GetValue()).index(1)+1
 				os.system("python "+"simulation.py %d"%self.v)
