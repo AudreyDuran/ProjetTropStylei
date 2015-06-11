@@ -35,11 +35,6 @@ class envir:
 		self.compteur = 0
 		self.dt = 0.1
 
-		p1 = protein(20, random.random()*fin, random.random()*fin)
-		p2 = protein(40, random.random()*fin, random.random()*fin)
-		p3 = protein(30, random.random()*fin, random.random()*fin)
-		p4 = protein(44, random.random()*fin, random.random()*fin)
-
 		self.dicoProt={}
 
 		self.dicoProt['fVIIa']=[p1]
@@ -68,6 +63,8 @@ class envir:
 		self.dicoRel['V']=(1,'Xa','Va','p')
 		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p')
 		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p')
+		self.dicoRel['fibrine']=(0,'p')
+		self.dicoRel['plaquette']=(0,'p')
 
 		#dictionnaire contient les tailles de chaque type de prot
 		#rempli au hasard pour le moment, a changer apres!!
@@ -276,10 +273,10 @@ print e.dicoProt['fVIIa']
 print e.dicoProt['TF']
 print e.dicoProt[e.dicoRel['TF'][1]]
 
-e.run()
-
 #prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
 e.prot(1,2,3,4,5,6,7,8,9,10)
+
+e.run()
 
 for i in e.dicoProt.keys():
 	print len(e.dicoProt[i])
