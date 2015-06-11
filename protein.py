@@ -92,8 +92,8 @@ class protein:
 					d = 1/math.hypot( (self.x - (position_trou + d_inter)), (self.y-diametre) )
 					if d <= 1:
 						# pour que la vitesse soit inversement proportionnel a d
-						self.x += dt * ( (position_trou+d_inter) - self.x )*d * d * vitesse_max_flux
-						self.y += dt * ( diametre - self.y )*d * d * vitesse_max_flux
+						self.x += dt * ( (position_trou+d_inter) - self.x )*d * vitesse_max_flux
+						self.y += dt * ( diametre - self.y )*d * vitesse_max_flux
 
 					if d > 1:
 						# pour ne pas que cela depasse la vitesse max
@@ -123,7 +123,7 @@ class protein:
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
 
 
-		self.x += dt * random.uniform(-1/16*vitesse_lim, vitesse_lim)
+		self.x += dt * random.uniform(0, vitesse_lim)
 		self.y += dt * random.uniform(-vitesse_lim, vitesse_lim)
 
 
