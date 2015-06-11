@@ -6,6 +6,7 @@ import random as r
 from protein import *
 
 
+
 class envir:
 
 
@@ -244,6 +245,8 @@ class envir:
 			pygame.display.set_caption(text)
 			pygame.display.flip()
 			self.moveAll() #on fait bouger toutes les prot
+
+from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
 e=envir(100,200,400,0,400,10^-10)
