@@ -8,7 +8,7 @@ from protein import *
 from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(100,200,gtk.gdk.screen_height()-100,0,gtk.gdk.screen_width(),,10^-10)
+e=envir(100,200,gtk.gdk.screen_height()-100,0,gtk.gdk.screen_width(),10^-10)
 # #dico normaux 
 # print e.dicoRel['V']
 # print e.dicoRel['V'][0]   #donne la proteine avec qui reagit
@@ -21,22 +21,22 @@ e=envir(100,200,gtk.gdk.screen_height()-100,0,gtk.gdk.screen_width(),,10^-10)
 # print len(e.dicoRel['Xa'])  #taille 2 aussi (car 2 tuples)
 
 
-print 'debut : fVIIa',e.dicoProt['fVIIa']
-print 'debut : TF',e.dicoProt['TF']
-print 'debut : Xa',e.dicoProt['Xa']
-e.moveAll()
-print 'fin : fVIIa',e.dicoProt['fVIIa']
-print 'fin : TF',e.dicoProt['TF']
-print 'fin : Xa',e.dicoProt['Xa']
+# print 'debut : fVIIa',e.dicoProt['fVIIa']
+# print 'debut : TF',e.dicoProt['TF']
+# print 'debut : Xa',e.dicoProt['Xa']
+# e.moveAll()
+# print 'fin : fVIIa',e.dicoProt['fVIIa']
+# print 'fin : TF',e.dicoProt['TF']
+# print 'fin : Xa',e.dicoProt['Xa']
 
-#reaction(self,typeProt,prot,prot2)
-#e.reaction('fVIIa',e.dicoProt['fVIIa'][0],e.dicoProt['TF'][0])
-print e.dicoProt['fVIIa']
-print e.dicoProt['TF']
-print e.dicoProt[e.dicoRel['TF'][1]]
+# #reaction(self,typeProt,prot,prot2)
+# #e.reaction('fVIIa',e.dicoProt['fVIIa'][0],e.dicoProt['TF'][0])
+# print e.dicoProt['fVIIa']
+# print e.dicoProt['TF']
+# print e.dicoProt[e.dicoRel['TF'][1]]
 
-#prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
-e.prot(1,2,3,4,5,6,7,8,9,10)
+#prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
+e.prot(1,2,3,4,5,6,7,8,9,10,11,12)
 
 e.run()
 

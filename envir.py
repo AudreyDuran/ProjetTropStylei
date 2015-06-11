@@ -43,6 +43,7 @@ class envir:
 		self.dicoProt['prothrombine']=[]
 		self.dicoProt['Xa']=[]
 		self.dicoProt['V']=[]
+		self.dicoProt['Va']=[]
 		self.dicoProt['fibrinogene']=[]
 		self.dicoProt['thrombine']=[]
 		self.dicoProt['fibrine']=[]
@@ -61,9 +62,11 @@ class envir:
 		#Xa + V = Va
 		self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p')
 		self.dicoRel['V']=(1,'Xa','Va','p')
+		self.dicoRel['Va']=(0,'p')
 		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p')
 		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p')
-#
+
+
 		self.dicoRel['fibrine']=(0,'p')
 		self.dicoRel['plaquette']=(0,'p')
 
@@ -79,10 +82,12 @@ class envir:
 		self.dicoTaille['prothrombine']=9
 		self.dicoTaille['Xa']=7
 		self.dicoTaille['V']=5
+		self.dicoTaille['Va']=2
 		self.dicoTaille['fibrinogene']=5
 		self.dicoTaille['thrombine']=9
 		self.dicoTaille['fibrine']=5
 		self.dicoTaille['plaquette']=20
+
 
 		#dictionnaire contient les couleurs dans lesquelles seront dessinees les proteines
 		#couleur a mettre en tuple (r,g,b)
@@ -95,6 +100,7 @@ class envir:
 		self.dicoCouleur['prothrombine']=(0,255,0)
 		self.dicoCouleur['Xa']=(0,0,0)
 		self.dicoCouleur['V']=(0,0,0)
+		self.dicoCouleur['Va']=(20,46,25)
 		self.dicoCouleur['fibrinogene']=(0,0,0)
 		self.dicoCouleur['thrombine']=(0,0,0)
 		self.dicoCouleur['fibrine']=(0,0,0)
@@ -111,8 +117,8 @@ class envir:
 
 	#cree le nombre de proteines indique pour chaque type de proteine
 
-	def prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
-		l=[fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette] #11 elements dans la liste
+	def prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
+		l=[fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
@@ -222,6 +228,7 @@ class envir:
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+			p.activation=False
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
@@ -230,12 +237,14 @@ class envir:
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+				p.activation=False
 				self.dicoProt[self.dicoRel[typeProt][2][0]].append(p) #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
 
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+				p.activation=False
 				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
