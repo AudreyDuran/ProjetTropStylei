@@ -72,17 +72,17 @@ class envir:
 		#rempli au hasard pour le moment, a changer apres!!
 		self.dicoTaille={}
 
-		self.dicoTaille['fVIIa']=[7]
-		self.dicoTaille['TF']=[8]
-		self.dicoTaille['X']=[7]
-		self.dicoTaille['VIIa-TF']=[8]
-		self.dicoTaille['prothrombine']=[9]
-		self.dicoTaille['Xa']=[7]
-		self.dicoTaille['V']=[5]
-		self.dicoTaille['fibrinogene']=[5]
-		self.dicoTaille['thrombine']=[9]
-		self.dicoTaille['fibrine']=[5]
-		self.dicoTaille['plaquette']=[20]
+		self.dicoTaille['fVIIa']=7
+		self.dicoTaille['TF']=8
+		self.dicoTaille['X']=7
+		self.dicoTaille['VIIa-TF']=8
+		self.dicoTaille['prothrombine']=9
+		self.dicoTaille['Xa']=7
+		self.dicoTaille['V']=5
+		self.dicoTaille['fibrinogene']=5
+		self.dicoTaille['thrombine']=9
+		self.dicoTaille['fibrine']=5
+		self.dicoTaille['plaquette']=20
 
 		#dictionnaire contient les couleurs dans lesquelles seront dessinees les proteines
 		#couleur a mettre en tuple (r,g,b)
@@ -102,7 +102,7 @@ class envir:
 
 
 		self.temps=0.0
-		self.venin=sys.argv[1]
+		#self.venin=sys.argv[1]
 		self.vitesse_lim=20
 		
 	#----------------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class envir:
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
-				self.dicoProt[prot].append(protein(self.dicoTaille[prot][0], random.random()*self.fin, random.random()*self.fin))
+				self.dicoProt[prot].append(protein(self.dicoTaille[prot], random.random()*self.fin, random.random()*self.fin))
 
 	#----------------------------------------------------------------------------------------------------
 	#										 printvaisseau
@@ -153,7 +153,6 @@ class envir:
 			lmemoire.append([])
 
 			for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
-				print typeProt,l[i]
 
 				if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
 					move = True #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
@@ -200,8 +199,6 @@ class envir:
 
 							#self.reaction(typeProt,l[i],prot)
 
-
-			print lmemoire
 			map(self.reaction,lmemoire[0],lmemoire[1],lmemoire[2])
 
 
@@ -215,17 +212,43 @@ class envir:
 	#enleve les proteines qui ont reagit de leur liste de prot
 	#typeProt=type d'une des prot qui reagit (en string)
 	#prot et prot 2 = objets proteines qui reagissent
+	#(prot est une proteine de type typeProt)
 
 	#rq : finalement pas de disctinction entre complexe et proteine car posait pb d'avoir un tuple de 2 prot et non une prot dans la liste des 
 	#proteines complexees (notamment pour prot.x, un tuple a pas d'attribut x)
 	#il faudra, dans la methode d'affichage, faire 2 boules quand c'est un complexe
 
 	def reaction(self,typeProt,prot,prot2):
-		#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
-		p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
+			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
+			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
-		self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
-		self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
+			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
+			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
+
+		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
+			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
+				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+				self.dicoProt[self.dicoRel[typeProt][2][0]].append(p) #on ajoute la nouvelle prot au bon tableau
+
+				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
+
+			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
+				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
+				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
+
+				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
+
+			self.dicoProt[typeProt].remove(prot) 
+
+
+		#a quel moment c'est ajoute dans liste prot ??
+
+
+
+
+
 
 
 
@@ -271,3 +294,19 @@ class envir:
 			pygame.display.set_caption(text)
 			pygame.display.flip()
 			self.moveAll() #on fait bouger toutes les prot
+
+
+#envir(taille_trou, position_trou, diametre, debut, fin, vitesse_max_flux)
+
+# e=envir(10,20,50,0,150,100)
+# p=protein(10,50,60)
+# p2=protein(8,50,60)
+# p3=protein(8,50,60)
+
+# e.dicoProt['Xa'].append(p)
+# e.dicoProt['prothrombine'].append(p2)
+# e.dicoProt['fibrinogene'].append(p3)
+
+# #print e.dicoProt
+# e.reaction('Xa',p,p2)
+# e.reaction('fibrinogene',p3,e.dicoProt['thrombine'][0])
