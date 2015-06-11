@@ -33,7 +33,7 @@ class envir:
 		self.fin = fin
 
 		self.compteur = 0
-		self.dt = 1
+		self.dt = 0.1
 
 		p1 = protein(20, random.random()*fin, random.random()*fin)
 		p2 = protein(40, random.random()*fin, random.random()*fin)
@@ -73,16 +73,16 @@ class envir:
 		#rempli au hasard pour le moment, a changer apres!!
 		self.dicoTaille={}
 
-		self.dicoTaille['fVIIa']=[10]
-		self.dicoTaille['TF']=[10]
-		self.dicoTaille['X']=[10]
-		self.dicoTaille['prothrombine']=[10]
-		self.dicoTaille['Xa']=[10]
-		self.dicoTaille['V']=[10]
-		self.dicoTaille['fibrinogene']=[10]
-		self.dicoTaille['thrombine']=[10]
-		self.dicoTaille['fibrine']=[10]
-		self.dicoTaille['plaquette']=[10]
+		self.dicoTaille['fVIIa']=[7]
+		self.dicoTaille['TF']=[8]
+		self.dicoTaille['X']=[7]
+		self.dicoTaille['prothrombine']=[9]
+		self.dicoTaille['Xa']=[7]
+		self.dicoTaille['V']=[5]
+		self.dicoTaille['fibrinogene']=[5]
+		self.dicoTaille['thrombine']=[9]
+		self.dicoTaille['fibrine']=[5]
+		self.dicoTaille['plaquette']=[20]
 
 		#dictionnaire contient les couleurs dans lesquelles seront dessinees les proteines
 		#couleur a mettre en tuple (r,g,b)
@@ -92,17 +92,31 @@ class envir:
 		self.dicoCouleur['TF']=(255,255,0)
 		self.dicoCouleur['X']=(255,0,0)
 		self.dicoCouleur['prothrombine']=(0,255,0)
-		self.dicoCouleur['Xa']=(255,255,255)
-		self.dicoCouleur['V']=(255,255,255)
-		self.dicoCouleur['fibrinogene']=(255,255,255)
-		self.dicoCouleur['thrombine']=(255,255,255)
-		self.dicoCouleur['fibrine']=(255,255,255)
-		self.dicoCouleur['plaquette']=(255,255,255)
+		self.dicoCouleur['Xa']=(0,0,0)
+		self.dicoCouleur['V']=(0,0,0)
+		self.dicoCouleur['fibrinogene']=(0,0,0)
+		self.dicoCouleur['thrombine']=(0,0,0)
+		self.dicoCouleur['fibrine']=(0,0,0)
+		self.dicoCouleur['plaquette']=(155,155,155)
 
 
 		self.temps=0.0
 		self.venin=sys.argv[1]
 		self.vitesse_lim=20
+		
+	#----------------------------------------------------------------------------------------------------
+	#										 prot
+	#----------------------------------------------------------------------------------------------------
+
+	#cree le nombre de proteines indique pour chaque type de proteine
+
+	def prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
+		l=[fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette] #10 elements dans la liste
+		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
+			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
+				#on cree la prot et on l'ajoute dans la liste correspondante
+				self.dicoProt[prot].append(protein(self.dicoTaille[prot][0], random.random()*self.fin, random.random()*self.fin))
+
 
 	def printvaisseau(self,surface):# dessine le vaisseau et le trou
 		pygame.draw.rect(surface,(200,40,40),((0,10),(self.longuer,10)),0)
@@ -125,7 +139,7 @@ class envir:
 		for typeProt,l in self.dicoProt.items(): #on parcourt chaque liste de prot (l=liste d'un type de prot)
 
 			for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
-				print "l[i]",l[i]
+#				print "l[i]",l[i]
 
 				if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
 					move = True #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
@@ -235,7 +249,7 @@ class envir:
 			self.moveAll() #on fait bouger toutes les prot
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(20,40,80,0,100,10)
+e=envir(100,200,400,0,400,10)
 # #dico normaux 
 # print e.dicoRel['V']
 # print e.dicoRel['V'][0]   #donne la proteine avec qui reagit
@@ -268,10 +282,4 @@ e.run()
 e.prot(1,2,3,4,5,6,7,8,9,10)
 
 for i in e.dicoProt.keys():
-    print len(e.dicoProt[i])
-
-
-
-
-
-
+	print len(e.dicoProt[i])
