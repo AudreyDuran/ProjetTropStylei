@@ -17,6 +17,8 @@ class protein:
 		self.compte = 0
 		self.tps = 0
 
+		self.denature = False
+
 
 
 
@@ -180,23 +182,23 @@ class protein:
 
 
 
-# move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
+# # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
 
-p = protein(20, random.random(), random.random())
-a = protein(40, random.random(), random.random())
+# p = protein(20, random.random(), random.random())
+# a = protein(40, random.random(), random.random())
 
-f = open("position.txt", "w")
-for t in xrange(5000):
-	p.move(0.1, 20, 100, 60, 0, 1000, 100, 200)
-	# a.move(0.1, 20, 10, 60, 0, 1000, 100, 20)
+# f = open("position.txt", "w")
+# for t in xrange(5000):
+# 	p.move(0.1, 20, 100, 60, 0, 1000, 100, 200)
+# 	# a.move(0.1, 20, 10, 60, 0, 1000, 100, 20)
 
-	# f.write("%f %f %f %f\n" %(p.x, p.y, a.x, a.y))
+# 	# f.write("%f %f %f %f\n" %(p.x, p.y, a.x, a.y))
 
-f.close()
+# f.close()
 
-f = open("fichiergnuplot","w")
-f.write('plot \"position.txt\" using 1:2 \n')
-f.write('replot \"position.txt\" using 3:4\n')
+# f = open("fichiergnuplot","w")
+# f.write('plot \"position.txt\" using 1:2 \n')
+# f.write('replot \"position.txt\" using 3:4\n')
 
-f.close()
-# os.system("gnuplot fichiergnuplot --persist")
+# f.close()
+# # os.system("gnuplot fichiergnuplot --persist")
