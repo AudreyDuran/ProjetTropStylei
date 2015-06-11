@@ -33,7 +33,7 @@ class envir:
 		self.fin = fin
 
 		self.compteur = 0
-		self.dt = 0.1
+		self.dt = 0.01
 
 		p1 = protein(20, random.random()*fin, random.random()*fin)
 		p2 = protein(40, random.random()*fin, random.random()*fin)
@@ -249,7 +249,7 @@ class envir:
 			self.moveAll() #on fait bouger toutes les prot
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(100,200,400,0,400,10)
+e=envir(100,200,400,0,400,10^-10)
 # #dico normaux 
 # print e.dicoRel['V']
 # print e.dicoRel['V'][0]   #donne la proteine avec qui reagit

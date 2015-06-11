@@ -92,8 +92,8 @@ class protein:
 					d = 1/math.sqrt((self.x - (position_trou + d_inter))**2 + (self.y-diametre)**2 )
 					if d <= 1:
 						# pour que la vitesse soit inversement proportionnel a d
-						self.x += dt * ( (position_trou+d_inter) - self.x )*d * vitesse_max_flux
-						self.y += dt * ( diametre - self.y )*d * vitesse_max_flux
+						self.x += dt * ( (position_trou+d_inter) - self.x )*d *d * vitesse_max_flux
+						self.y += dt * ( diametre - self.y )*d*d * vitesse_max_flux
 
 					if d > 1:
 						# pour ne pas que cela depasse la vitesse max
