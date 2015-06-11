@@ -89,7 +89,7 @@ class protein:
 
 				if self.y < diametre:
 					# inverse de la distance entre proteine et l endroit ou elle toucherai la blessure si elle suivait la flux parallelement
-					d = 1/math.hypot( (self.x - (position_trou + d_inter)), (self.y-diametre) )
+					d = 1/math.sqrt((self.x - (position_trou + d_inter))**2 + (self.y-diametre)**2 )
 					if d <= 1:
 						# pour que la vitesse soit inversement proportionnel a d
 						self.x += dt * ( (position_trou+d_inter) - self.x )*d * vitesse_max_flux
