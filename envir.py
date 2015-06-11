@@ -39,7 +39,7 @@ class envir:
 		self.dicoProt['fVIIa']=[]
 		self.dicoProt['TF']=[]
 		self.dicoProt['X']=[]
-		#on fait une liste pour les complexes ? ou on met juste attribut active ?
+		self.dicoProt['VIIa-TF']=[]
 		self.dicoProt['prothrombine']=[]
 		self.dicoProt['Xa']=[]
 		self.dicoProt['V']=[]
@@ -47,6 +47,7 @@ class envir:
 		self.dicoProt['thrombine']=[]
 		self.dicoProt['fibrine']=[]
 		self.dicoProt['plaquette']=[]
+
 
 
 		self.dicoRel={}
@@ -74,6 +75,7 @@ class envir:
 		self.dicoTaille['fVIIa']=[7]
 		self.dicoTaille['TF']=[8]
 		self.dicoTaille['X']=[7]
+		self.dicoTaille['VIIa-TF']=[8]
 		self.dicoTaille['prothrombine']=[9]
 		self.dicoTaille['Xa']=[7]
 		self.dicoTaille['V']=[5]
@@ -89,6 +91,7 @@ class envir:
 		self.dicoCouleur['fVIIa']=(0,0,255)
 		self.dicoCouleur['TF']=(255,255,0)
 		self.dicoCouleur['X']=(255,0,0)
+		self.dicoCouleur['VIIa-TF']=(10,0,0)
 		self.dicoCouleur['prothrombine']=(0,255,0)
 		self.dicoCouleur['Xa']=(0,0,0)
 		self.dicoCouleur['V']=(0,0,0)
@@ -108,18 +111,26 @@ class envir:
 
 	#cree le nombre de proteines indique pour chaque type de proteine
 
-	def prot(self,fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
-		l=[fVIIa,TF,X,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette] #10 elements dans la liste
+	def prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette):
+		l=[fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,fibrinogene,thrombine,fibrine,plaquette] #11 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
 				self.dicoProt[prot].append(protein(self.dicoTaille[prot][0], random.random()*self.fin, random.random()*self.fin))
 
+	#----------------------------------------------------------------------------------------------------
+	#										 printvaisseau
+	#----------------------------------------------------------------------------------------------------
 
 	def printvaisseau(self,surface):# dessine le vaisseau et le trou
 		pygame.draw.rect(surface,(200,40,40),((0,10),(self.longuer,10)),0)
 		pygame.draw.rect(surface,(200,40,40),((0,self.diametre+10),(self.longuer,10)),0)
 		pygame.draw.rect(surface,(255,55,155),((self.position_trou,self.diametre+10),(self.taille_trou,15)),0)
+
+	#----------------------------------------------------------------------------------------------------
+	#										 printallprotein
+	#----------------------------------------------------------------------------------------------------
+
 
 	def printallprotein(self,surface):#dessine toutes les proteines dans la liste prot total
 		for z in self.dicoProt.keys():#on parcourt toutes les prot
@@ -136,8 +147,13 @@ class envir:
 	def moveAll(self):
 		for typeProt,l in self.dicoProt.items(): #on parcourt chaque liste de prot (l=liste d'un type de prot)
 
+			lmemoire=[]  #liste memoire cree pour pas supprimer des proteine pdt qu'on les parcourt dans le for
+			lmemoire.append([])
+			lmemoire.append([])
+			lmemoire.append([])
+
 			for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
-#				print "l[i]",l[i]
+				print typeProt,l[i]
 
 				if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
 					move = True #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
@@ -159,7 +175,8 @@ class envir:
 						if move == False: #si a rencontre une prot donc va reagir
 							l[i].activation=True #on active les 2 prot
 							prot.activation=True
-							self.reaction(typeProt,l[i],prot)  
+							#self.reaction(typeProt,l[i],prot)  
+							lmemoire.append((typeProt,l[i],prot))
 
 
 					if self.dicoRel[typeProt][0]>1: #si peut reagir avec 2 types de prot
@@ -176,7 +193,16 @@ class envir:
 						if move == False:
 							l[i].activation=True #on active les 2 prot
 							prot.activation=True
-							self.reaction(typeProt,l[i],prot)
+							lmemoire[0].append(typeProt)
+							lmemoire[1].append(l[i])
+							lmemoire[2].append(prot)
+
+
+							#self.reaction(typeProt,l[i],prot)
+
+
+			print lmemoire
+			map(self.reaction,lmemoire[0],lmemoire[1],lmemoire[2])
 
 
 
