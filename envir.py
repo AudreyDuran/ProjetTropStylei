@@ -128,7 +128,7 @@ class envir:
 	#----------------------------------------------------------------------------------------------------
 	# dessine le vaisseau et le trou
 
-	def printvaisseau(self,surface):
+	def printvaisseau(self,surface,t):
 		pygame.draw.rect(surface,(200,40,40),((0,10),(self.longuer,10)),0)
 		pygame.draw.rect(surface,(200,40,40),((0,self.diametre+10),(self.longuer,10)),0)
 		if t>5:
