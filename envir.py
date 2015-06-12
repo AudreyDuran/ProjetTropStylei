@@ -232,7 +232,9 @@ class envir:
 							if move == False: #si a rencontre une prot donc va reagir
 								#l[i].activation=True #on active les 2 prot
 								#prot.activation=True 
-								lmemoire.append((typeProt,l[i],prot))
+								lmemoire[0].append(typeProt)
+								lmemoire[1].append(l[i])
+								lmemoire[2].append(prot)
 
 
 						if self.dicoRel[typeProt][0]>1: #si peut reagir avec 2 types de prot
@@ -275,6 +277,7 @@ class envir:
 	#il faudra, dans la methode d'affichage, faire 2 boules quand c'est un complexe
 
 	def reaction(self,typeProt,prot,prot2):
+		print "dans reaction", typeProt,prot,prot2
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
