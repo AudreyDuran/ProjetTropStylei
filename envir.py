@@ -131,8 +131,8 @@ class envir:
 	def printvaisseau(self,surface):
 		pygame.draw.rect(surface,(200,40,40),((0,10),(self.longuer,10)),0)
 		pygame.draw.rect(surface,(200,40,40),((0,self.diametre+10),(self.longuer,10)),0)
-		pygame.draw.rect(surface,(255,55,155),((self.position_trou,self.diametre+10),(self.taille_trou,15)),0)
-
+		if t>5:
+			pygame.draw.rect(surface,(255,55,155),((self.position_trou,self.diametre+10),(self.taille_trou,15)),0)
 	#----------------------------------------------------------------------------------------------------
 	#										 printallprotein
 	#----------------------------------------------------------------------------------------------------
@@ -312,7 +312,7 @@ class envir:
 			screen.fill((255,255,255))		#
 			self.temps += clock.tick(60) / 1000.0 	#implementation du cronometre
 			text = "Playtime:%d"%self.temps		#
-			self.printvaisseau(screen)
+			self.printvaisseau(screen,self.temps)
 # 			for z in self.dicoProt.keys():#on parcourt toutes les prot
 # 				for y in self.dicoProt[z]:
 # # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
