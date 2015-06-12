@@ -8,7 +8,10 @@ from protein import *
 from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(100,200,gtk.gdk.screen_height()-100,0,gtk.gdk.screen_width(),10^-10)
+e=envir(100,200,924, 0,gtk.gdk.screen_width(),10^-10)
+# gtk.gdk.screen_height()-100
+
+
 # #dico normaux 
 # print e.dicoRel['V']
 # print e.dicoRel['V'][0]   #donne la proteine avec qui reagit
