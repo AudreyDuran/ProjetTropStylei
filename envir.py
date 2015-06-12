@@ -116,8 +116,8 @@ class envir:
 
 	#cree le nombre de proteines indique pour chaque type de proteine
 
-	def prot(self,VIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
-		l=[VIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette] #12 elements dans la liste
+	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
+		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
@@ -158,13 +158,13 @@ class envir:
 			lmemoire.append([])
 
 			#traitement special des facteurs tissulaires, qui doivent pas sortir par le trou mais y rester
-			if typeProt=='TF':
+			if typeProt=='plaquette':
 				for i in xrange(len(l)): # pour chaque facteur tissulaire
 					if l[i].activation==False: #si pas deja activee
-						if l[i].x>self.position_trou-l[i].rayon and l[i].x < self.position_trou + self.taille_trou + l[i].rayon: #si TF dans intervalle du trou +- le rayon
-							if l[i].y > self.diametre - l[i].rayon - 100: #si proche du trou en y (-10= aleatoire, a modifier apres)
+						if l[i].x>self.position_trou and l[i].x < self.position_trou + self.taille_trou : #si plaquette dans intervalle du trou +- le rayon
+							if l[i].y > self.diametre - l[i].rayon - 30: #si proche du trou en y (-10= aleatoire, a modifier apres)
 								#alors va se fixer et rester la
-								l[i].y=self.diametre+l[i].rayon #sur le trou (on garde le meme x)
+								l[i].y=self.diametre#sur le trou (on garde le meme x)
 								l[i].activation=True #alors TF active
 
 					if l[i].activation== False: #si tjrs pas activee

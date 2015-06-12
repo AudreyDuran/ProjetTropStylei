@@ -38,8 +38,9 @@ e=envir(100,200,924, 0,gtk.gdk.screen_width(),10^-10)
 # print e.dicoProt['TF']
 # print e.dicoProt[e.dicoRel['TF'][1]]
 
-#prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
-e.prot(1,2,3,4,5,6,7,8,9,10,11,12)
+#prot(fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa)
+
+e.prot(10,0,3,0,50,10,0,0,0,10,11,0)
 
 e.run()
 
