@@ -145,7 +145,7 @@ class protein:
 			
 
 
-	# vitesse max flux et la vitesse du flux qui part vers la blessure
+	# vitesse max flux est la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
 		
 		
