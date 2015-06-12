@@ -123,39 +123,44 @@ class protein:
 
 	# vitesse max flux et la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
-
-
+		
+		
 		self.x += dt * random.uniform(0, vitesse_lim)
-		self.y += dt * random.uniform(-vitesse_lim, vitesse_lim)
+		self.y += dt * random.uniform(-2*vitesse_lim, 2*vitesse_lim)
 
 
 		# Pour eviter qu elle sorte du vaiseau par le haut
-		if self.y < 0 :
-			self.y = 0.
+		if self.y < self.rayon :
+			self.y = self.rayon
 
-		# Pour eviter qu elle sorte par le cote gauche
-		if self.x < 0:
-			self.x = 0.
+		# pour eviter que les proteine sortent par la gauche
+		if self.x < debut:
+			self.x = debut
 
-		# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou
-		if self.y > diametre:
+
+		# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou (a gauche du trou)
+		if self.y >= diametre-self.rayon:
 			if self.x < position_trou:
-				if self.x > position_trou+taille_trou:
-					self.y = diametre
+				self.y = diametre - self.rayon
+				
+		# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou (a droite du trou)
+		if self.y > diametre-self.rayon:
+			if self.x > position_trou + taille_trou:
+				self.y = diametre - self.rayon
 
 		# Quand elle arrivent a la fin
-		if self.x > fin :
+		if self.x >= fin :
 			self.x = debut
-			self.y = random.uniform(0, diametre)
+			self.y = random.uniform(self.rayon, diametre-self.rayon)
 
 
 
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
-		# elle sort d un certain perimetre ici on aurait un cercle de rayon 150
-		if self.y > diametre:
-			if math.sqrt((self.x - position_trou+taille_trou/2)**2 + (self.y - diametre)**2) > math.sqrt(150):
+		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
+		if self.y > diametre-self.rayon:
+			if math.sqrt((self.x - position_trou+taille_trou/2.)**2+(self.y - diametre)**2) > math.sqrt(diametre):
 				self.x = debut
-				self.y = random.uniform(0, diametre)
+				self.y = random.uniform(self.rayon, diametre-self.rayon)
 
 
 				# Pour le comptage des proteine qui sont sortie du cercle
@@ -166,18 +171,19 @@ class protein:
 		if self.x > position_trou - taille_trou:
 			if self.x < position_trou + taille_trou:
 				self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
-
-
+				
+				
 		# Pour le comptage des proteine qui ne sont pas sortie du cercle
 		return 0
-
-
-
-
-
-
-
 		
+
+
+
+
+p = protein(20, 5, 150)
+p.move(0.1, 10, 10, 20,0,100,100, 50)
+print p.x, p.y
+
 
 
 
