@@ -147,8 +147,6 @@ class protein:
 
 	# vitesse max flux est la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
-		
-		
 		self.x += dt * random.uniform(0, vitesse_lim)
 		self.y += dt * random.uniform(-2*vitesse_lim, 2*vitesse_lim)
 
