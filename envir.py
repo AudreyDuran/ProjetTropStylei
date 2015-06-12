@@ -159,13 +159,13 @@ class envir:
 			lmemoire.append([])
 
 			#traitement special des facteurs tissulaires, qui doivent pas sortir par le trou mais y rester
-			if typeProt=='TF' or typeProt=='VIIa-TF':
+			if typeProt=='TF':
 				for i in xrange(len(l)): # pour chaque facteur tissulaire
 					if l[i].activation==False: #si pas deja activee
 						if l[i].x>self.position_trou-l[i].rayon and l[i].x < self.position_trou + self.taille_trou + l[i].rayon: #si TF dans intervalle du trou +- le rayon
 							if l[i].y > self.diametre - l[i].rayon - 100: #si proche du trou en y (-10= aleatoire, a modifier apres)
 								#alors va se fixer et rester la
-								l[i].y=self.diametre #sur le trou (on garde le meme x)
+								l[i].y=self.diametre+l[i].rayon #sur le trou (on garde le meme x)
 								l[i].activation=True #alors TF active
 
 					if l[i].activation== False: #si tjrs pas activee
@@ -179,6 +179,10 @@ class envir:
 						move = True #de base peut bouger, sauf si rencontre une prot ac qui peut reagir
 						prot = 0 #proteine avec qui va reagir 
 						distance = self.fin*self.diametre  #distance entre les 2 prot initialisee tres grande
+
+						if self.dicoRel[typeProt][0]==0:
+							l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+
 
 						if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 							for j in self.dicoProt[self.dicoRel[typeProt][1]]: #pour chaque prot de liste des prot avec qui peut reagir (j=type prot)
@@ -310,10 +314,10 @@ class envir:
 			self.temps += clock.tick(60) / 1000.0 	#implementation du cronometre
 			text = "Playtime:%d"%self.temps		#
 			self.printvaisseau(screen)
-			for z in self.dicoProt.keys():#on parcourt toutes les prot
-				for y in self.dicoProt[z]:
-# move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
-					y.move(0.1, 10, self.position_trou, self.taille_trou, self.debut,self.fin, self.diametre, self.vitesse_max_flux)
+# 			for z in self.dicoProt.keys():#on parcourt toutes les prot
+# 				for y in self.dicoProt[z]:
+# # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
+# 					y.move(0.1, 10, self.position_trou, self.taille_trou, self.debut,self.fin, self.diametre, self.vitesse_max_flux)
 			self.printallprotein(screen,deffont)#on dessine chaque prot selon le type de prot
 
 			pygame.display.set_caption(text)
