@@ -8,7 +8,7 @@ from protein import *
 from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(100,200,924, 0,gtk.gdk.screen_width(),10^-10)
+e=envir(500,300,300, 0,gtk.gdk.screen_width(),10^-10)
 # gtk.gdk.screen_height()-100
 
 
@@ -40,7 +40,9 @@ e=envir(100,200,924, 0,gtk.gdk.screen_width(),10^-10)
 
 #prot(fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa)
 
-e.prot(10,0,3,0,50,10,0,0,0,10,11,0)
+#e.prot(0,0,5,0,50,10,0,0,4,15,11,20)
+e.prot(10,10,5,10,50,10,10,10,4,15,11,20)
+
 
 e.run()
 
