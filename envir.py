@@ -105,7 +105,7 @@ class envir:
 		self.dicoCouleur['fibrine']=(0,0,0)
 		self.dicoCouleur['plaquette']=(155,155,155)
 
-
+		self.blessure=False
 		self.temps=0.0
 		#self.venin=sys.argv[1]
 		self.vitesse_lim=20
@@ -117,21 +117,37 @@ class envir:
 	#cree le nombre de proteines indique pour chaque type de proteine
 
 	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
-		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
+		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,20,X,VIIa] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
 				self.dicoProt[prot].append(protein(self.dicoTaille[prot], random.random()*self.fin, random.random()*self.fin))
+		d=len(self.dicoProt["TF"]);q=0.5
+		for i in self.dicoProt["TF"]:
+			if d>0:
+				i.x=self.position_trou+q*self.taille_trou/d
+				i.y=self.diametre+5
+				i.activation=True
+				q=q+1
+
+
+#expose le TF
+	def TF(self):
+		if(self.blessure):
+			for i in self.dicoProt["TF"]:
+				i.y=self.diametre-7
+
+
 
 	#----------------------------------------------------------------------------------------------------
 	#										 printvaisseau
 	#----------------------------------------------------------------------------------------------------
 	# dessine le vaisseau et le trou
 
-	def printvaisseau(self,surface,t):
+	def printvaisseau(self,surface):
 		pygame.draw.rect(surface,(200,40,40),((0,10),(self.longuer,10)),0)
 		pygame.draw.rect(surface,(200,40,40),((0,self.diametre+10),(self.longuer,10)),0)
-		if t>5:
+		if self.blessure:
 			pygame.draw.rect(surface,(255,55,155),((self.position_trou,self.diametre+10),(self.taille_trou,15)),0)
 	#----------------------------------------------------------------------------------------------------
 	#										 printallprotein
@@ -162,7 +178,7 @@ class envir:
 				for i in xrange(len(l)): # pour chaque facteur tissulaire
 					if l[i].activation==False: #si pas deja activee
 						if l[i].x>self.position_trou and l[i].x < self.position_trou + self.taille_trou : #si plaquette dans intervalle du trou +- le rayon
-							if l[i].y > self.diametre - l[i].rayon - 30: #si proche du trou en y (-10= aleatoire, a modifier apres)
+							if l[i].y > self.diametre - l[i].rayon - 30 and self.blessure: #si proche du trou en y (-10= aleatoire, a modifier apres)
 								#alors va se fixer et rester la
 								l[i].y=self.diametre#sur le trou (on garde le meme x)
 								l[i].activation=True #alors TF active
@@ -284,6 +300,7 @@ class envir:
 	#----------------------------------------------------------------------------------------------------
 
 	def run(self):
+		once=False
 	# Initialize Pygame.
 		pygame.init()
 	# Set size of pygame window. width=a.longuer; heigth=a.diametre+40
@@ -312,7 +329,11 @@ class envir:
 			screen.fill((255,255,255))		#
 			self.temps += clock.tick(60) / 1000.0 	#implementation du cronometre
 			text = "Playtime:%d"%self.temps		#
-			self.printvaisseau(screen,self.temps)
+			if self.temps>5 and not once:
+				self.blessure=True
+				self.TF()
+				once=True
+			self.printvaisseau(screen)
 # 			for z in self.dicoProt.keys():#on parcourt toutes les prot
 # 				for y in self.dicoProt[z]:
 # # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
