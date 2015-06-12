@@ -314,7 +314,7 @@ class envir:
 				for y in self.dicoProt[z]:
 # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
 					y.move(0.1, 10, self.position_trou, self.taille_trou, self.debut,self.fin, self.diametre, self.vitesse_max_flux)
-			self.printallprotein(screen)#on dessine chaque prot selon le type de prot
+			self.printallprotein(screen,deffont)#on dessine chaque prot selon le type de prot
 
 			pygame.display.set_caption(text)
 			pygame.display.flip()
