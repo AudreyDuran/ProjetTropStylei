@@ -35,26 +35,25 @@ class envir:
 		self.dt = 0.1
 
 		self.dicoProt={}
-
-		self.dicoProt['fVIIa']=[]
-		self.dicoProt['TF']=[]
-		self.dicoProt['X']=[]
-		self.dicoProt['VIIa-TF']=[]
-		self.dicoProt['prothrombine']=[]
-		self.dicoProt['Xa']=[]
-		self.dicoProt['V']=[]
-		self.dicoProt['Va']=[]
-		self.dicoProt['fibrinogene']=[]
-		self.dicoProt['thrombine']=[]
-		self.dicoProt['fibrine']=[]
-		self.dicoProt['plaquette']=[]
+		self.dicoProt['VIIa']=[]#1 (cree a la blessure)
+		self.dicoProt['TF']=[]#cree a la blessure(0 de base)
+		self.dicoProt['X']=[]#1
+		self.dicoProt['VIIa-TF']=[]#0 #au trou
+		self.dicoProt['prothrombine']=[]#1
+		self.dicoProt['Xa']=[]#0 
+		self.dicoProt['V']=[]#1
+		self.dicoProt['Va']=[]#0
+		self.dicoProt['fibrinogene']=[]#1
+		self.dicoProt['thrombine']=[]#0
+		self.dicoProt['fibrine']=[]#0
+		self.dicoProt['plaquette']=[]#11
 
 
 
 		self.dicoRel={}
 
-		self.dicoRel['fVIIa']=(1,'TF','VIIa-TF','c')
-		self.dicoRel['TF']=(1,'fVIIa','VIIa-TF','c')
+		self.dicoRel['VIIa']=(1,'TF','VIIa-TF','c')
+		self.dicoRel['TF']=(1,'VIIa','VIIa-TF','c')
 		self.dicoRel['X']=(1,'VIIa-TF','Xa','p')
 		self.dicoRel['VIIa-TF']=(1,'X','Xa','p')
 		self.dicoRel['prothrombine']=(1,'Xa','thrombine','p')
@@ -75,14 +74,14 @@ class envir:
 		#rempli au hasard pour le moment, a changer apres!!
 		self.dicoTaille={}
 
-		self.dicoTaille['fVIIa']=7
+		self.dicoTaille['VIIa']=7
 		self.dicoTaille['TF']=8
 		self.dicoTaille['X']=7
 		self.dicoTaille['VIIa-TF']=8
 		self.dicoTaille['prothrombine']=9
 		self.dicoTaille['Xa']=7
 		self.dicoTaille['V']=5
-		self.dicoTaille['Va']=2
+		self.dicoTaille['Va']=5
 		self.dicoTaille['fibrinogene']=5
 		self.dicoTaille['thrombine']=9
 		self.dicoTaille['fibrine']=5
@@ -93,13 +92,13 @@ class envir:
 		#couleur a mettre en tuple (r,g,b)
 		self.dicoCouleur={}
 
-		self.dicoCouleur['fVIIa']=(0,0,255)
-		self.dicoCouleur['TF']=(255,255,0)
+		self.dicoCouleur['VIIa']=(0,0,255)
+		self.dicoCouleur['TF']=(255,55,155)
 		self.dicoCouleur['X']=(255,0,0)
 		self.dicoCouleur['VIIa-TF']=(10,0,0)
 		self.dicoCouleur['prothrombine']=(0,255,0)
 		self.dicoCouleur['Xa']=(0,0,0)
-		self.dicoCouleur['V']=(0,0,0)
+		self.dicoCouleur['V']=(20,46,25)
 		self.dicoCouleur['Va']=(20,46,25)
 		self.dicoCouleur['fibrinogene']=(0,0,0)
 		self.dicoCouleur['thrombine']=(0,0,0)
@@ -117,8 +116,8 @@ class envir:
 
 	#cree le nombre de proteines indique pour chaque type de proteine
 
-	def prot(self,fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
-		l=[fVIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette] #12 elements dans la liste
+	def prot(self,VIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette):
+		l=[VIIa,TF,X,VIIaTF,prothrombine,Xa,V,Va,fibrinogene,thrombine,fibrine,plaquette] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
