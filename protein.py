@@ -117,8 +117,32 @@ class protein:
 
 
 
+	def move_avant(self, dt, vitesse_lim, debut, fin, diametre):
+		
+		self.x += dt * random.uniform(0, vitesse_lim)
+		self.y += dt * random.uniform(-2*vitesse_lim, 2*vitesse_lim)
 
 
+		# Pour eviter qu elle sorte du vaiseau par le haut
+		if self.y < self.rayon :
+			self.y = self.rayon
+
+		# pour eviter que les proteine ne sortent par la gauche
+		if self.x < debut:
+			self.x = debut
+
+
+		# Pour eviter qu elle sorte du vaiseau en bas
+		if self.y >= diametre-self.rayon:
+				self.y = diametre - self.rayon
+				
+
+		# Quand elle arrivent a la fin
+		if self.x >= fin :
+			self.x = debut
+			self.y = random.uniform(self.rayon, diametre-self.rayon)
+			
+			
 
 
 	# vitesse max flux et la vitesse du flux qui part vers la blessure
@@ -154,6 +178,11 @@ class protein:
 			self.y = random.uniform(self.rayon, diametre-self.rayon)
 
 
+		# pour la proteine qui part dans le flux secondaire
+		if self.x > position_trou - taille_trou:
+			if self.x < position_trou + taille_trou:
+				self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
+
 
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
 		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
@@ -167,10 +196,7 @@ class protein:
 				return 1
 
 
-		# pour la proteine qui part dans le flux secondaire
-		if self.x > position_trou - taille_trou:
-			if self.x < position_trou + taille_trou:
-				self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
+		
 				
 				
 		# Pour le comptage des proteine qui ne sont pas sortie du cercle
