@@ -118,7 +118,7 @@ class envir:
 
 	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
 		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,20,X,VIIa] #12 elements dans la liste
-		for i,prot in enumerate(self.dicoProt.keys()): #pour chaqye type de prot
+		for i,prot in enumerate(self.dicoProt.keys()): #pour chaque type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
 				self.dicoProt[prot].append(protein(self.dicoTaille[prot], random.random()*self.fin, random.random()*self.fin))
@@ -130,13 +130,16 @@ class envir:
 				i.activation=True
 				q=q+1
 
+	#----------------------------------------------------------------------------------------------------
+	#										      TF
+	#----------------------------------------------------------------------------------------------------
 
 #expose le TF
 	def TF(self):
 		if(self.blessure):
 			for i in self.dicoProt["TF"]:
-				i.y=self.diametre-7
-
+				i.y=self.diametre-i.rayon-10
+				i.activation=False
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -160,6 +163,21 @@ class envir:
 			for y in self.dicoProt[z]:
 				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,y.activation)
 				surface.blit(font.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
+
+
+	#----------------------------------------------------------------------------------------------------
+	#									  moveAll_avant
+	#----------------------------------------------------------------------------------------------------
+	#mouvement de toutes les proteines avant qu'il n'y ait la breche
+
+	def moveAll_avant(self):
+		for typeProt,l in self.dicoProt.items(): #on parcourt chaque liste de prot (l=liste d'un type de prot)
+			if typeProt=='TF':
+				a=0
+			else:
+				for i in xrange(len(l)):
+					l[i].move_avant(self.dt, self.vitesse_lim, self.debut, self.fin, self.diametre)
+		
 	#----------------------------------------------------------------------------------------------------
 	#									  moveAll
 	#----------------------------------------------------------------------------------------------------
@@ -173,7 +191,7 @@ class envir:
 			lmemoire.append([])
 			lmemoire.append([])
 
-			#traitement special des facteurs tissulaires, qui doivent pas sortir par le trou mais y rester
+			#traitement special des plaquettes qui doivent pas sortir par le trou mais y rester
 			if typeProt=='plaquette':
 				for i in xrange(len(l)): # pour chaque facteur tissulaire
 					if l[i].activation==False: #si pas deja activee
@@ -181,13 +199,13 @@ class envir:
 							if l[i].y > self.diametre - l[i].rayon - 30 and self.blessure: #si proche du trou en y (-10= aleatoire, a modifier apres)
 								#alors va se fixer et rester la
 								l[i].y=self.diametre#sur le trou (on garde le meme x)
-								l[i].activation=True #alors TF active
+								l[i].activation=True #alors plaquette active
 
 					if l[i].activation== False: #si tjrs pas activee
 						l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
 
-			else: #si pas un facteur tissulaire
+			else: #si pas des plaquettes
 				for i in xrange(len(l)): #on regarde chaque prot de cette liste  (l[i]=une prot de cette liste d'un type)
 
 					if l[i].activation==False: #si est pas deja activee (auquel cas ne peut pas bouger)
@@ -212,9 +230,8 @@ class envir:
 								l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
 							if move == False: #si a rencontre une prot donc va reagir
-								l[i].activation=True #on active les 2 prot
-								prot.activation=True
-								#self.reaction(typeProt,l[i],prot)  
+								#l[i].activation=True #on active les 2 prot
+								#prot.activation=True 
 								lmemoire.append((typeProt,l[i],prot))
 
 
@@ -230,14 +247,13 @@ class envir:
 								l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux)
 							
 							if move == False:
-								l[i].activation=True #on active les 2 prot
-								prot.activation=True
+								#l[i].activation=True #on active les 2 prot
+								#prot.activation=True
 								lmemoire[0].append(typeProt)
 								lmemoire[1].append(l[i])
 								lmemoire[2].append(prot)
 
 
-								#self.reaction(typeProt,l[i],prot)
 
 				map(self.reaction,lmemoire[0],lmemoire[1],lmemoire[2])
 
@@ -262,12 +278,11 @@ class envir:
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
-			p.activation=False
+			#p.activation=False (inutile, deja false par defaut)
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
-
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
@@ -282,14 +297,7 @@ class envir:
 				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
-
 			self.dicoProt[typeProt].remove(prot) 
-
-
-		#a quel moment c'est ajoute dans liste prot ??
-
-
-
 
 
 
@@ -342,4 +350,8 @@ class envir:
 
 			pygame.display.set_caption(text)
 			pygame.display.flip()
-			self.moveAll() #on fait bouger toutes les prot
+			if self.temps<=5:
+				self.moveAll_avant() #on fait bouger toutes les prot
+			else:
+				self.moveAll()
+
