@@ -21,17 +21,18 @@ class envir:
 	#protTotales : liste de ttes  les proteines dans le sang
 	#dicoRel : contient pour chaque prot ( avec cb de prot reagit, (affinite,devient), 'c' si forme cplexe 'p' si forme prot)
 	#dicoProt : dico contient toutes les proteines (avec en cle leur nom en string)
+	#nbReaction : compte le nombre de reactions qui ont eu lieu
 
 	def __init__(self, taille_trou, position_trou, diametre, debut, fin, vitesse_max_flux):
 		self.taille_trou = taille_trou
 		self.position_trou = position_trou
 		self.vitesse_max_flux = vitesse_max_flux
-		self.longuer=fin-debut  #idem que taille_trou non ?
+		self.longuer=fin-debut 
 		self.diametre = diametre
 		self.debut=debut
 		self.fin = fin
 
-		self.compteur = 0
+		self.compteurFlux = 0
 		self.dt = 0.1
 
 		self.dicoProt={}
@@ -109,6 +110,7 @@ class envir:
 		self.temps=0.0
 		#self.venin=sys.argv[1]
 		self.vitesse_lim=20
+		self.nbReaction=0
 		
 	#----------------------------------------------------------------------------------------------------
 	#										 prot
@@ -202,6 +204,7 @@ class envir:
 								l[i].activation=True #alors plaquette active
 
 					if l[i].activation== False: #si tjrs pas activee
+						#pas de compteur pour les plaquettes ! :))) car sortent pas
 						l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
 
@@ -214,7 +217,7 @@ class envir:
 						distance = self.fin*self.diametre  #distance entre les 2 prot initialisee tres grande
 
 						if self.dicoRel[typeProt][0]==0:
-							l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+							self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
 
 						if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
@@ -227,7 +230,7 @@ class envir:
 
 							if move == True: #si va bouger, a rencontre aucune prot ac qui peut reagir (regarder apres fin boucle for)
 
-								l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
 
 							if move == False: #si a rencontre une prot donc va reagir
 								#l[i].activation=True #on active les 2 prot
@@ -246,7 +249,7 @@ class envir:
 											prot=j
 											distance=l[i].distance(j)
 							if move == True:
-								l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux)
+								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux)
 							
 							if move == False:
 								#l[i].activation=True #on active les 2 prot
@@ -277,7 +280,8 @@ class envir:
 	#il faudra, dans la methode d'affichage, faire 2 boules quand c'est un complexe
 
 	def reaction(self,typeProt,prot,prot2):
-		print "dans reaction", typeProt,prot,prot2
+		self.nbReaction+=1
+		print self.nbReaction, typeProt
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
@@ -357,4 +361,6 @@ class envir:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
+
+			print "prot sortent",self.compteurFlux
 
