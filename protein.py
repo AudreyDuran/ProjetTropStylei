@@ -186,7 +186,7 @@ class protein:
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
 		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
 		if self.y > diametre-self.rayon:
-			if math.sqrt((self.x - position_trou+taille_trou/2.)**2+(self.y - diametre)**2) > math.sqrt(diametre):
+			if math.sqrt((self.x - (position_trou+taille_trou/2.))**2+(self.y - diametre)**2) > math.sqrt(diametre/2):
 				self.x = debut
 				self.y = random.uniform(self.rayon, diametre-self.rayon)
 
@@ -196,17 +196,14 @@ class protein:
 			else:
 				if l_pla != False:
 					for i in l_pla:
-						if self.rayon + i.rayon < i.x + self.x:
+						print self
+						if i.rayon > i.x + self.x:
 							self.y += dt * random.uniform(-4*vitesse_lim,0)
 
 
 
-				
 
 
-		
-				
-				
 		# Pour le comptage des proteine qui ne sont pas sortie du cercle
 		return 0
 		
@@ -214,9 +211,10 @@ class protein:
 
 
 
-p = protein(20, 5, 150)
-p.move(0.1, 10, 10, 20,0,100,100, 50)
-print p.x, p.y
+# p = protein(0.1, 20, 100)
+# e = protein(40, 10, 100)
+# p.move(0.1, 10, 10, 20,0,100,100, 50, [e])
+
 
 
 
