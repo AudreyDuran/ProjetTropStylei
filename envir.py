@@ -53,22 +53,23 @@ class envir:
 
 		self.dicoRel={}
 
-		self.dicoRel['VIIa']=(1,'TF','VIIa-TF','c')
-		self.dicoRel['TF']=(1,'VIIa','VIIa-TF','c')
-		self.dicoRel['X']=(1,'VIIa-TF','Xa','p')
-		self.dicoRel['VIIa-TF']=(1,'X','Xa','p')
-		self.dicoRel['prothrombine']=(1,'Xa','thrombine','p')
+		#dernier attribut : move=True ou False (par rapport a la cle)
+		self.dicoRel['VIIa']=(1,'TF','VIIa-TF','c',True)
+		self.dicoRel['TF']=(1,'VIIa','VIIa-TF','c',False)
+		self.dicoRel['X']=(1,'VIIa-TF','Xa','p',True)
+		self.dicoRel['VIIa-TF']=(1,'X','Xa','p',False)
+		self.dicoRel['prothrombine']=(1,'Xa','thrombine','p',True)
 		#Xa + prothrombine = thrombine
 		#Xa + V = Va
-		self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p')
-		self.dicoRel['V']=(1,'Xa','Va','p')
-		self.dicoRel['Va']=(0,'p')
-		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p')
-		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p')
+		self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p',True)
+		self.dicoRel['V']=(1,'Xa','Va','p',True)
+		self.dicoRel['Va']=(0,'p',True)
+		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p',True)
+		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p',True)
 
 
-		self.dicoRel['fibrine']=(0,'p')
-		self.dicoRel['plaquette']=(0,'p')
+		self.dicoRel['fibrine']=(0,'p',True)
+		self.dicoRel['plaquette']=(0,'p',True)
 
 
 		#dictionnaire contient les tailles de chaque type de prot
@@ -283,24 +284,36 @@ class envir:
 		self.nbReaction+=1
 		print self.nbReaction, typeProt
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
+			print "1"
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
-			#p.activation=False (inutile, deja false par defaut)
+
+			if self.dicoRel[self.dicoRel[typeProt][2]][4]==False:
+				p.activation=True
+
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
+
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
+			print "2"
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
-				p.activation=False
+
+				if self.dicoRel[self.dicoRel[typeProt][2][0]][4]==False:
+					p.activation=True
+
 				self.dicoProt[self.dicoRel[typeProt][2][0]].append(p) #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
 
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
-				p.activation=False
+
+
+				if self.dicoRel[self.dicoRel[typeProt][2][1]][4]==False:
+					p.activation=True
 				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
@@ -358,5 +371,4 @@ class envir:
 			else:
 				self.moveAll()
 
-			print "prot sortent",self.compteurFlux
 

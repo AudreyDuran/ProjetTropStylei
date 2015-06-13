@@ -40,8 +40,8 @@ e=envir(500,300,300, 0,gtk.gdk.screen_width(),10^-10)
 
 #prot(fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa)
 
-#e.prot(0,0,5,0,50,10,0,0,4,15,11,20)
-e.prot(10,10,5,10,50,10,10,10,4,15,11,20)
+e.prot(0,0,5,0,50,10,0,0,4,15,30,20)
+
 
 
 e.run()
