@@ -27,13 +27,15 @@ class protein:
 
 
 
-
+	#renvoie la distance entre deux proteines
+	def distance(self,a):
+		return math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
 
 
 	#renvoie true si la prot peut detecter la prot a, false sinon 
 	def detection(self, a):
 
-		if math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2) <= self.rayon:
+		if distance(a) <= self.rayon:
 			return True
 
 		else:
@@ -42,16 +44,14 @@ class protein:
 	# detection pour la fibrine
 	def detection_fibrine(self, a, b):
 
-		if math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2) <= self.rayon:
-			if math.sqrt((self.x-b.x)**2 + (self.y - b.y)**2) <= self.rayon:
+		if distance(a) <= self.rayon:
+			if distance(b) <= self.rayon:
 				return True
 
 		return False
 
 
-	#renvoie la distance entre deux proteines
-	def distance(self,a):
-		return math.sqrt((self.x-a.x)**2 + (self.y - a.y)**2)
+	
 
 
 	# compte le nombre de tour pour les plaquettes si elle n ont pas de fibrine pour les liees
@@ -146,7 +146,7 @@ class protein:
 
 
 	# vitesse max flux est la vitesse du flux qui part vers la blessure
-	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
+	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux, l_pla=False):
 		self.x += dt * random.uniform(0, vitesse_lim)
 		self.y += dt * random.uniform(-2*vitesse_lim, 2*vitesse_lim)
 
@@ -176,6 +176,7 @@ class protein:
 			self.y = random.uniform(self.rayon, diametre-self.rayon)
 
 
+
 		# pour la proteine qui part dans le flux secondaire
 		if self.x > position_trou - taille_trou:
 			if self.x < position_trou + taille_trou:
@@ -189,9 +190,18 @@ class protein:
 				self.x = debut
 				self.y = random.uniform(self.rayon, diametre-self.rayon)
 
-
 				# Pour le comptage des proteine qui sont sortie du cercle
 				return 1
+
+			else:
+				if l_pla != False:
+					for i in l_pla:
+						if self.rayon + i.rayon < i.x + self.x:
+							self.y += dt * random.uniform(-4*vitesse_lim,0)
+
+
+
+				
 
 
 		
