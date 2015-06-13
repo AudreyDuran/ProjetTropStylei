@@ -114,7 +114,7 @@ class envir:
 		self.listPlaquetteActivees=[]
 
 
-		if self.venin=True:
+		if self.venin==True:
 			self.dicoProt['VeninV']=[]
 			self.dicoCouleur['VeninV']=(19,60,19)
 			self.dicoTaille['VeninV']= 10
