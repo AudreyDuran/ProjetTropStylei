@@ -66,8 +66,6 @@ class envir:
 		self.dicoRel['Va']=(0,'p',True)
 		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p',True)
 		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p',True)
-
-
 		self.dicoRel['fibrine']=(0,'p',True)
 		self.dicoRel['plaquette']=(0,'p',True)
 
@@ -281,8 +279,8 @@ class envir:
 	#il faudra, dans la methode d'affichage, faire 2 boules quand c'est un complexe
 
 	def reaction(self,typeProt,prot,prot2):
-		self.nbReaction+=1
-		print self.nbReaction, typeProt
+#		self.nbReaction+=1
+#		print self.nbReaction, typeProt
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			print "1"
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
@@ -294,6 +292,7 @@ class envir:
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
+			print "Erro 2:%s %s %s"%(typeProt,prot,prot2)
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
@@ -309,19 +308,19 @@ class envir:
 				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
 
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
+				print "Erro 1:%s %s %s"%(typeProt,prot,prot2)
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
 
-				if self.dicoRel[self.dicoRel[typeProt][2][1]][4]==False:
+				if self.dicoRel[self.dicoRel[typeProt][2][1]][-1]==False:
 					p.activation=True
 				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
 
 				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
 			self.dicoProt[typeProt].remove(prot) 
-
-
-
-
+#		self.dicoRel['V']=(1,'Xa','Va','p',True)
+#		self.dicoRel['plaquette']=(0,'p',True)
+#		self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p',True)
 
 	#----------------------------------------------------------------------------------------------------
 	#										 run
@@ -370,5 +369,4 @@ class envir:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
-
 
