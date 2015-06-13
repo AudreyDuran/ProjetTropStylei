@@ -98,10 +98,10 @@ class envir:
 		self.dicoCouleur['VIIa-TF']=(10,0,0)
 		self.dicoCouleur['prothrombine']=(0,255,0)
 		self.dicoCouleur['Xa']=(0,0,0)
-		self.dicoCouleur['V']=(20,46,25)
-		self.dicoCouleur['Va']=(10,30,69)
+		self.dicoCouleur['V']=(255,90,0)
+		self.dicoCouleur['Va']=(255,0,90)
 		self.dicoCouleur['fibrinogene']=(0,0,0)
-		self.dicoCouleur['thrombine']=(0,0,0)
+		self.dicoCouleur['thrombine']=(184,134,11)
 		self.dicoCouleur['fibrine']=(0,0,0)
 		self.dicoCouleur['plaquette']=(155,155,155)
 
@@ -114,12 +114,14 @@ class envir:
 		self.listPlaquetteActivees=[]
 
 
-		if self.venin==True:
-			self.dicoProt['VeninV']=[]
-			self.dicoCouleur['VeninV']=(19,60,19)
-			self.dicoTaille['VeninV']= 10
+		self.dicoProt['VeninV']=[]
+		self.dicoCouleur['VeninV']=(19,60,19)
+		self.dicoTaille['VeninV']= 10
 
-		
+		if self.venin==True:
+			self.dicoRel['V']=(2,('Xa','VeninV'),('Va','Va'),'p',True)
+			self.dicoRel['VeninV']=(1,'Va','VeninV','p',True)
+
 	#----------------------------------------------------------------------------------------------------
 	#										 prot
 	#----------------------------------------------------------------------------------------------------
@@ -127,7 +129,7 @@ class envir:
 	#cree le nombre de proteines indique pour chaque type de proteine
 
 	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
-		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
+		l=[fibrine,Va,0,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaque type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
@@ -150,6 +152,9 @@ class envir:
 			for i in self.dicoProt["TF"]:
 				i.y=self.diametre-i.rayon-10
 				i.activation=True
+			if self.venin:
+				for i in xrange(40):# nombre completement aleatoire
+					self.dicoProt['VeninV'].append(protein(self.dicoTaille['VeninV'], self.position_trou+random.random()*self.taille_trou, self.diametre-self.dicoTaille['VeninV']-30))
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -168,11 +173,17 @@ class envir:
 	#dessine toutes les proteines dans la liste prot total
 
 
-	def printallprotein(self,surface,font):#dessine toutes les proteines dans la liste prot total
+	def printallprotein(self,surface,font1,font2):#dessine toutes les proteines dans la liste prot total
+		i=0
+		surface.blit(font1.render("Nb initial / Nb actuel", 1, (0,0,0)), (10,self.diametre+30))			
 		for z in self.dicoProt.keys():#on parcourt toutes les prot
+			pygame.draw.circle(surface,self.dicoCouleur[z],(100*i+20,self.diametre+60), 15,0)
+			surface.blit(font2.render(z, 1, (0,0,0)), (100*i+20,self.diametre+80))
+			surface.blit(font1.render("%d / %d"%(self.linit[i],len(self.dicoProt[z])), 1, (0,0,0)), (100*i+20,self.diametre+90))
+			i=i+1
 			for y in self.dicoProt[z]:
-				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,y.activation)
-				surface.blit(font.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
+				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,1-y.activation)
+				surface.blit(font1.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -343,11 +354,14 @@ class envir:
 	#----------------------------------------------------------------------------------------------------
 
 	def run(self):
+		self.linit=[]
+		for z in self.dicoProt.keys():
+			self.linit.append(len(self.dicoProt[z]))
 		once=False
 	# Initialize Pygame.
 		pygame.init()
 	# Set size of pygame window. width=a.longuer; heigth=a.diametre+40
-		screen=pygame.display.set_mode((self.longuer,self.diametre+40))
+		screen=pygame.display.set_mode((self.longuer,self.diametre+120))
 	# Create empty pygame surface.
 		background = pygame.Surface(screen.get_size())
 	# Fill the background white color.
@@ -361,6 +375,7 @@ class envir:
 		#creer toutes les proteines qu'il faut (de base mettre des attributs de classe avec la compo de chaque venin?)
 		pygame.font.init()
 		deffont = pygame.font.SysFont(pygame.font.get_default_font(),20)
+		font2 = pygame.font.SysFont(pygame.font.get_default_font(),15)
 		loop=True
 		while loop: #loop= mantenir ouverte la fenetre
 			for event in pygame.event.get():
@@ -371,25 +386,18 @@ class envir:
 						loop = False # ESC
 			screen.fill((255,255,255))		#
 			self.temps += clock.tick(60) / 1000.0 	#implementation du cronometre
-			text = "Playtime:%d"%self.temps		#
+			text = "Playtime:%d\tReactions:%d"%(self.temps,self.nbReaction)		#
 			if self.temps>5 and not once:
 				self.blessure=True
 				self.TF()
 				once=True
 			self.printvaisseau(screen)
-			self.printallprotein(screen,deffont)#on dessine chaque prot selon le type de prot
+			self.printallprotein(screen,deffont,font2)#on dessine chaque prot selon le type de prot
 
 			pygame.display.set_caption(text)
 			pygame.display.flip()
-			if self.temps<=5:
+			if not self.blessure:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
 			print len(self.dicoProt['TF'])
-
-
-#taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-# e=envir(10,50,50,0,200,10^-10)
-# e.prot(0,0,50,0,50,50,0,0,50,50,60,50)
-# e.moveAll()
-# print e.listPlaquetteActivees
