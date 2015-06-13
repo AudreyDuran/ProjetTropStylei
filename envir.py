@@ -127,7 +127,7 @@ class envir:
 	#cree le nombre de proteines indique pour chaque type de proteine
 
 	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
-		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,20,X,VIIa] #12 elements dans la liste
+		l=[fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaque type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
 				#on cree la prot et on l'ajoute dans la liste correspondante
@@ -206,7 +206,7 @@ class envir:
 				for i in xrange(len(l)): # pour chaque facteur tissulaire
 					if l[i].activation==False: #si pas deja activee
 						if l[i].x>self.position_trou and l[i].x < self.position_trou + self.taille_trou : #si plaquette dans intervalle du trou +- le rayon
-							if l[i].y > self.diametre - l[i].rayon - 30 and self.blessure: #si proche du trou en y (-10= aleatoire, a modifier apres)
+							if l[i].y > self.diametre - l[i].rayon - 50 and self.blessure: #si proche du trou en y (-10= aleatoire, a modifier apres)
 								#alors va se fixer et rester la
 								l[i].y=self.diametre#sur le trou (on garde le meme x)
 								l[i].activation=True #alors plaquette active
@@ -244,9 +244,10 @@ class envir:
 							if move == False: #si a rencontre une prot donc va reagir
 								#l[i].activation=True #on active les 2 prot
 								#prot.activation=True 
-								lmemoire[0].append(typeProt)
-								lmemoire[1].append(l[i])
-								lmemoire[2].append(prot)
+								if not prot in lmemoire[2]:
+									lmemoire[0].append(typeProt)
+									lmemoire[1].append(l[i])
+									lmemoire[2].append(prot)
 
 
 						if self.dicoRel[typeProt][0]>1: #si peut reagir avec 2 types de prot
@@ -263,9 +264,12 @@ class envir:
 							if move == False:
 								#l[i].activation=True #on active les 2 prot
 								#prot.activation=True
-								lmemoire[0].append(typeProt)
-								lmemoire[1].append(l[i])
-								lmemoire[2].append(prot)
+
+								#on verifie qu'une autre proteine de la meme liste n'a pas deja reagi avec cette prot j
+								if not prot in lmemoire[2]:
+									lmemoire[0].append(typeProt)
+									lmemoire[1].append(l[i])
+									lmemoire[2].append(prot)
 
 
 
@@ -304,7 +308,8 @@ class envir:
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
-			#print self.dicoProt[self.dicoRel[typeProt][1]]
+			print typeProt,"reagit avec", self.dicoRel[typeProt][1] #X
+			print "dicoPb",self.dicoProt[self.dicoRel[typeProt][1]]
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
@@ -380,7 +385,7 @@ class envir:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
-			print len(self.listPlaquetteActivees)
+			print len(self.dicoProt['TF'])
 
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
