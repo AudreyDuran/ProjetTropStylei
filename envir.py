@@ -279,20 +279,22 @@ class envir:
 	#il faudra, dans la methode d'affichage, faire 2 boules quand c'est un complexe
 
 	def reaction(self,typeProt,prot,prot2):
-#		self.nbReaction+=1
+		self.nbReaction+=1
 #		print self.nbReaction, typeProt
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
 			print "1"
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
-			if self.dicoRel[self.dicoRel[typeProt][2]][4]==False:
+			print typeProt,self.dicoRel[typeProt][1]
+			print "dicoRel",self.dicoRel[self.dicoRel[typeProt][2]]
+			if self.dicoRel[self.dicoRel[typeProt][2]][-1]==False:
 				p.activation=True
 
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
-			print "Erro 2:%s %s %s"%(typeProt,prot,prot2)
+			print self.dicoProt[self.dicoRel[typeProt][1]]
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
@@ -300,7 +302,7 @@ class envir:
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
-				if self.dicoRel[self.dicoRel[typeProt][2][0]][4]==False:
+				if self.dicoRel[self.dicoRel[typeProt][2][0]][-1]==False:
 					p.activation=True
 
 				self.dicoProt[self.dicoRel[typeProt][2][0]].append(p) #on ajoute la nouvelle prot au bon tableau
@@ -308,7 +310,6 @@ class envir:
 				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
 
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
-				print "Erro 1:%s %s %s"%(typeProt,prot,prot2)
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
 
