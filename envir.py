@@ -110,6 +110,7 @@ class envir:
 		#self.venin=sys.argv[1]
 		self.vitesse_lim=20
 		self.nbReaction=0
+		self.listPlaquetteActivees=[]
 		
 	#----------------------------------------------------------------------------------------------------
 	#										 prot
@@ -201,10 +202,11 @@ class envir:
 								#alors va se fixer et rester la
 								l[i].y=self.diametre#sur le trou (on garde le meme x)
 								l[i].activation=True #alors plaquette active
+								self.listPlaquetteActivees.append(l[i])
 
 					if l[i].activation== False: #si tjrs pas activee
 						#pas de compteur pour les plaquettes ! :))) car sortent pas
-						l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+						l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux,self.listPlaquetteActivees)
 
 
 			else: #si pas des plaquettes
@@ -216,7 +218,7 @@ class envir:
 						distance = self.fin*self.diametre  #distance entre les 2 prot initialisee tres grande
 
 						if self.dicoRel[typeProt][0]==0:
-							self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+							self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux,self.listPlaquetteActivees)
 
 
 						if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
@@ -229,7 +231,7 @@ class envir:
 
 							if move == True: #si va bouger, a rencontre aucune prot ac qui peut reagir (regarder apres fin boucle for)
 
-								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux)
+								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre,self.vitesse_max_flux,self.listPlaquetteActivees)
 
 							if move == False: #si a rencontre une prot donc va reagir
 								#l[i].activation=True #on active les 2 prot
@@ -248,7 +250,7 @@ class envir:
 											prot=j
 											distance=l[i].distance(j)
 							if move == True:
-								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux)
+								self.compteurFlux+=l[i].move(self.dt, self.vitesse_lim, self.position_trou, self.taille_trou, self.debut, self.fin, self.diametre, self.vitesse_max_flux,self.listPlaquetteActivees)
 							
 							if move == False:
 								#l[i].activation=True #on active les 2 prot
@@ -282,23 +284,23 @@ class envir:
 		self.nbReaction+=1
 #		print self.nbReaction, typeProt
 		if self.dicoRel[typeProt][0]==1: #si peut reagir qu'avec un type de proteine
-			print "1"
+			#print "1"
 			#on cree la nouvelle proteine qui aura comme cord la moyenne des coords des 2 autres prot
 			p = protein(self.dicoTaille[self.dicoRel[typeProt][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
-			print typeProt,self.dicoRel[typeProt][1]
-			print "dicoRel",self.dicoRel[self.dicoRel[typeProt][2]]
+			#print typeProt,self.dicoRel[typeProt][1]
+			#print "dicoRel",self.dicoRel[self.dicoRel[typeProt][2]]
 			if self.dicoRel[self.dicoRel[typeProt][2]][-1]==False:
 				p.activation=True
 
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
-			print self.dicoProt[self.dicoRel[typeProt][1]]
+			#print self.dicoProt[self.dicoRel[typeProt][1]]
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
-			print "2"
+			#print "2"
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][0]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
@@ -370,4 +372,11 @@ class envir:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
+			print len(self.listPlaquetteActivees)
 
+
+#taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
+# e=envir(10,50,50,0,200,10^-10)
+# e.prot(0,0,50,0,50,50,0,0,50,50,60,50)
+# e.moveAll()
+# print e.listPlaquetteActivees
