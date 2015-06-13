@@ -107,9 +107,14 @@ class envir:
 
 		self.blessure=False
 		self.temps=0.0
-		#self.venin=sys.argv[1]
+		self.venin=int(sys.argv[1])
 		self.vitesse_lim=20
 		self.nbReaction=0
+
+		if self.venin=True:
+			self.dicoProt['VeninV']=[]
+			self.dicoCouleur['VeninV']=(19,60,19)
+			self.dicoTaille['VeninV']= 10
 		
 	#----------------------------------------------------------------------------------------------------
 	#										 prot
