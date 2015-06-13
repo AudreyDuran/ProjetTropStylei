@@ -141,7 +141,7 @@ class envir:
 		if(self.blessure):
 			for i in self.dicoProt["TF"]:
 				i.y=self.diametre-i.rayon-10
-				i.activation=False
+				i.activation=True
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -349,10 +349,6 @@ class envir:
 				self.TF()
 				once=True
 			self.printvaisseau(screen)
-# 			for z in self.dicoProt.keys():#on parcourt toutes les prot
-# 				for y in self.dicoProt[z]:
-# # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
-# 					y.move(0.1, 10, self.position_trou, self.taille_trou, self.debut,self.fin, self.diametre, self.vitesse_max_flux)
 			self.printallprotein(screen,deffont)#on dessine chaque prot selon le type de prot
 
 			pygame.display.set_caption(text)
