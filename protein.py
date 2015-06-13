@@ -71,17 +71,16 @@ class protein:
 	# defini une vitesse supplementaire lorsque la proteine rentre dans le flux de sang qui part par la blessure
 	def attraction(self, dt, position_trou, taille_trou, vitesse_max_flux, diametre):
 
-		# definition de variable qu on utilisera plus tard
-		a = position_trou - taille_trou
-
+		# debut du flux en x
+		a = float(position_trou - taille_trou)
 
 
 		# calcul la longueur de la base du petit triangle rectangle dont le gros est forme par le sommet du flux avec la paroi
 		# haute du vaiseau puis prolongement orthogonal sur la paroi basse et revenir sur un des bouts de la blessure (theoreme
 		# de thales)
-		b = taille_trou*self.y/diametre
+		b = taille_trou*self.y/float(diametre)
 
-
+		print self.x, b+a
 		# si la proteine est dans le parallelogramme defini par [debut trou, fin trou, haut du flux partant de la fin du trou,
 		# haut du flux partant du debut du trou]
 		if self.x > b + a:
@@ -107,7 +106,8 @@ class protein:
 
 				# quand la proteine est sortie du vaisseau
 				else:
-					c = taille_trou*(diametre+200)/diametre
+					# encore theoreme de thales
+					c = taille_trou*(diametre+200)/float(diametre)
 					d = 1/math.hypot( (self.x - (a+c+d_inter)), (self.y - (diametre+200)) )
 
 					self.x += dt * ( (a+c+d_inter)-self.x )*d * vitesse_max_flux 
@@ -209,12 +209,10 @@ class protein:
 		
 
 
+# dt, position_trou, taille_trou, vitesse_max_flux, diametre
 
-
-# p = protein(0.1, 20, 100)
-# e = protein(40, 10, 100)
-# p.move(0.1, 10, 10, 20,0,100,100, 50, [e])
-
+# p = protein(0.1, 10, 5)
+# p.attraction(0.1, 10, 10, 40, 10)
 
 
 
