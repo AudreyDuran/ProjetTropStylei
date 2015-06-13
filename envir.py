@@ -101,7 +101,7 @@ class envir:
 		self.dicoCouleur['prothrombine']=(0,255,0)
 		self.dicoCouleur['Xa']=(0,0,0)
 		self.dicoCouleur['V']=(20,46,25)
-		self.dicoCouleur['Va']=(20,46,25)
+		self.dicoCouleur['Va']=(10,30,69)
 		self.dicoCouleur['fibrinogene']=(0,0,0)
 		self.dicoCouleur['thrombine']=(0,0,0)
 		self.dicoCouleur['fibrine']=(0,0,0)
