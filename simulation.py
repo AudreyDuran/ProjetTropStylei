@@ -40,11 +40,11 @@ e=envir(500,300,300, 0,gtk.gdk.screen_width(),10^-10)
 
 #prot(fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa)
 
-e.prot(0,0,50,0,200,1500,0,0,5,15,5,0)
-# Vrai valeur (0, 0, 100, 0, 150 a 400 milion, 3000, 0, 0, 10, 30, 10, ?)
+e.prot(0,0,5,0,50,10,0,0,4,15,30,20)
+
 
 
 e.run()
 
-# for i in e.dicoProt.keys():
-# 	print len(e.dicoProt[i])
+for i in e.dicoProt.keys():
+	print len(e.dicoProt[i])
