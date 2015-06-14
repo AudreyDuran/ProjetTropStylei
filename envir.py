@@ -175,11 +175,11 @@ class envir:
 
 	def printallprotein(self,surface,font1,font2):#dessine toutes les proteines dans la liste prot total
 		i=0
-		surface.blit(font1.render("Nb initial / Nb actuel", 1, (0,0,0)), (10,self.diametre+30))			
+		surface.blit(font1.render("Nb actuel /Nb initial ", 1, (0,0,0)), (10,self.diametre+30))			
 		for z in self.dicoProt.keys():#on parcourt toutes les prot
 			pygame.draw.circle(surface,self.dicoCouleur[z],(100*i+20,self.diametre+60), 15,0)
 			surface.blit(font2.render(z, 1, (0,0,0)), (100*i+20,self.diametre+80))
-			surface.blit(font1.render("%d / %d"%(self.linit[i],len(self.dicoProt[z])), 1, (0,0,0)), (100*i+20,self.diametre+90))
+			surface.blit(font1.render("%d / %d"%(len(self.dicoProt[z]),self.linit[i]), 1, (0,0,0)), (100*i+20,self.diametre+90))
 			i=i+1
 			for y in self.dicoProt[z]:
 				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,1-y.activation)
