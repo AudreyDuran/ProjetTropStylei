@@ -80,7 +80,7 @@ class protein:
 		# de thales)
 		b = taille_trou*self.y/float(diametre)
 
-		print self.x, b+a
+		#print self.x, b+a
 		# si la proteine est dans le parallelogramme defini par [debut trou, fin trou, haut du flux partant de la fin du trou,
 		# haut du flux partant du debut du trou]
 		if self.x > b + a:
@@ -185,7 +185,7 @@ class protein:
 
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
 		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
-		if self.y > diametre-self.rayon:
+		if self.y > diametre:
 			if math.sqrt((self.x - (position_trou+taille_trou/2.))**2+(self.y - diametre)**2) > math.sqrt(diametre/2):
 				self.x = debut
 				self.y = random.uniform(self.rayon, diametre-self.rayon)
@@ -196,9 +196,8 @@ class protein:
 			else:
 				if l_pla != False:
 					for i in l_pla:
-						print self
-						if i.rayon > i.x + self.x:
-							self.y += dt * random.uniform(-4*vitesse_lim,0)
+						if i.rayon < i.x + self.x:
+							self.y += dt * random.uniform(-100*vitesse_lim,0)
 
 
 

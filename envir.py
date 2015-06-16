@@ -108,7 +108,7 @@ class envir:
 		self.blessure=False
 		self.temps=0.0
 		self.venin=int(sys.argv[1])
-		self.vitesse_lim=20
+		self.vitesse_lim=30
 		self.nbReaction=0
 
 		self.listPlaquetteActivees=[]
@@ -183,7 +183,7 @@ class envir:
 			i=i+1
 			for y in self.dicoProt[z]:
 				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,1-y.activation)
-				surface.blit(font1.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
+				#surface.blit(font1.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -319,8 +319,8 @@ class envir:
 			self.dicoProt[self.dicoRel[typeProt][2]].append(p) #on ajoute la nouvelle prot creee a son tableau 
 
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
-			print typeProt,"reagit avec", self.dicoRel[typeProt][1] #X
-			print "dicoPb",self.dicoProt[self.dicoRel[typeProt][1]]
+			#print typeProt,"reagit avec", self.dicoRel[typeProt][1] #X
+			#print "dicoPb",self.dicoProt[self.dicoRel[typeProt][1]]
 			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
 
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
@@ -386,13 +386,13 @@ class envir:
 						loop = False # ESC
 			screen.fill((255,255,255))		#
 			self.temps += clock.tick(60) / 1000.0 	#implementation du cronometre
-			text = "Playtime:%d\tReactions:%d"%(self.temps,self.nbReaction)		#
+			text = "Playtime:%d\tReactions:%d\tProteines sortant:%d"%(self.temps,self.nbReaction,self.compteurFlux)		#
 			if self.temps>5 and not once:
 				self.blessure=True
 				self.TF()
 				once=True
 			self.printvaisseau(screen)
-			self.printallprotein(screen,deffont,font2)#on dessine chaque prot selon le type de prot
+			self.printallprotein(screen,deffont,font2) #on dessine chaque prot selon le type de prot
 
 			pygame.display.set_caption(text)
 			pygame.display.flip()
@@ -400,4 +400,4 @@ class envir:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
-			print len(self.dicoProt['TF'])
+			#print len(self.dicoProt['TF'])

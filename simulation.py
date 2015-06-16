@@ -8,7 +8,7 @@ from protein import *
 from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(500,300,300, 0,gtk.gdk.screen_width(),10^-10)
+e=envir(500,300,300, 0,gtk.gdk.screen_width(),60)
 # gtk.gdk.screen_height()-100
 
 
@@ -42,12 +42,12 @@ e=envir(500,300,300, 0,gtk.gdk.screen_width(),10^-10)
 
 
 
-e.prot(0,0,50,0,200,1500,0,0,5,15,5,0)
+# e.prot(0,0,50,0,200,1500,0,0,5,15,5,0)
 # Vrai valeur (0, 0, 100, 0, 150 a 400 milion, 3000, 0, 0, 10, 30, 10, ?)
-
+e.prot(0,0,50,0,200,500,0,0,5,15,5,15)
 
 
 e.run()
 
-for i in e.dicoProt.keys():
-	print len(e.dicoProt[i])
+#for i in e.dicoProt.keys():
+#	print len(e.dicoProt[i])
