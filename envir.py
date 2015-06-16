@@ -118,9 +118,17 @@ class envir:
 		self.dicoCouleur['VeninV']=(19,60,19)
 		self.dicoTaille['VeninV']= 10
 
-		if self.venin==True:
-			self.dicoRel['V']=(2,('Xa','VeninV'),('Va','Va'),'p',True)
-			self.dicoRel['VeninV']=(1,'Va','VeninV','p',True)
+		if self.venin>0:
+			self.dicoProt['Venin']=[]
+			self.dicoTaille['Venin']= 10
+			if self.venin==1:
+				self.dicoRel['V']=(2,('Xa','Venin'),('Va','Va'),'p',True)
+				self.dicoRel['Venin']=(1,'Va','Venin','p',True)
+			if self.venin==2:
+				self.dicoRel['Xa']=(3,('prothrombine','V','Venin'),('thrombine','Va','X'),'p',True)
+				self.dicoRel['Venin']=(1,'Xa','Venin','p',True)
+				self.dicoCouleur['Venin']=(219,160,19)
+
 
 	#----------------------------------------------------------------------------------------------------
 	#										 prot
