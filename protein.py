@@ -145,12 +145,36 @@ class protein:
 			
 
 
+	def fin_coagulation(self, l_pla):
+
+		if l_pla!=False:
+			l = [[i.x-i.rayon, i.x+i.rayon] for i in l_pla]
+			l.sort()
+			
+			i=0
+
+			# Pour faire la liste avec les proteines activees un intervalle continue avec la surface que couvre les proteines en x
+			while i < len(l)-1:
+				if l[i][1]>l[i+1][0]:
+					l[i]=[l[i][0], l[i+1][1]]
+					l.pop(i+1)
+				else:
+					i+=1
+
+			if len(l) == 1:
+				return True
+
+			else: 
+				return False
+
+
+
 	# vitesse max flux est la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux, l_pla=False):
 		
-		if len(l_pla) >=100:
-			self.move_avant(dt, vitesse_lim, debut, fin, diametre)
-			return 0
+		# if self.fin_coagulation(l_pla) == True:
+		# 	self.move_avant(dt, vitesse_lim, debut, fin, diametre)
+		# 	return 0
 
 
 
@@ -166,35 +190,36 @@ class protein:
 		if self.x < debut:
 			self.x = debut
 
-
 		# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou (a gauche du trou)
-		if self.y >= diametre-self.rayon:
-			if self.x < position_trou:
-				self.y = diametre - self.rayon
+		if self.y >= diametre-self.rayon and self.x < position_trou:
+			self.y = diametre - self.rayon
 				
 		# Pour eviter qu elle sorte du vaiseau tant qu il n y a pas le trou (a droite du trou)
-		if self.y > diametre-self.rayon:
-			if self.x > position_trou + taille_trou:
-				self.y = diametre - self.rayon
+		if self.y > diametre-self.rayon and self.x > position_trou + taille_trou:
+			self.y = diametre - self.rayon
 
 		# Quand elle arrivent a la fin
 		if self.x >= fin :
 			self.x = debut
 			self.y = random.uniform(self.rayon, diametre-self.rayon)
+			self.denature = False
+
+
 
 
 
 		# pour la proteine qui part dans le flux secondaire
-		if self.x > position_trou - taille_trou:
-			if self.x < position_trou + taille_trou:
-				self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
+		if self.x > position_trou - taille_trou and self.x < position_trou + taille_trou:
+			self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
+
+
 
 
 
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
-		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
-		if self.y > diametre:
-			if math.sqrt((self.x - (position_trou+taille_trou/2.))**2+(self.y - diametre)**2) > math.sqrt(diametre/2):
+		# elle sort d un certain perimetre ici on aurait un cercle de rayon taille_trou/2
+		if self.y > diametre-self.rayon:
+			if ((self.x - (position_trou+taille_trou/2.))**2+(self.y - diametre)**2) > (taille_trou/2)**2 and self.y>diametre:
 				self.x = debut
 				self.y = random.uniform(self.rayon, diametre-self.rayon)
 
@@ -204,8 +229,9 @@ class protein:
 			else:
 				if l_pla != False:
 					for i in l_pla:
-						if i.rayon < i.x + self.x:
-							self.y = diametre-self.rayon
+						if i.detection(self)==True and self.y < i.y:
+							# print 'aa'
+							self.y = diametre-i.rayon
 
 
 
@@ -215,14 +241,24 @@ class protein:
 		return 0
 		
 
+p = protein(1, 5,6)
+e = protein(1,6, 9)
+f = protein(1,4,3)
+g = protein(1,9, 5)
+
+
+print p.fin_coagulation([p,e,f])
 
 # dt, position_trou, taille_trou, vitesse_max_flux, diametre
 
 # p = protein(0.1, 10, 5)
 # p.attraction(0.1, 10, 10, 40, 10)
 
+# e = protein(10, 30, 100)
 
-
+# p = protein(10, 35, 105)
+# p.move(0.1,10,10,50,0,100,100,50, [e])
+# print p
 
 
 # # move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux):
