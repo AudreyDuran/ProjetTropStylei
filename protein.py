@@ -147,6 +147,13 @@ class protein:
 
 	# vitesse max flux est la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux, l_pla=False):
+		
+		if len(l_pla) >=100:
+			self.move_avant(dt, vitesse_lim, debut, fin, diametre)
+			return 0
+
+
+
 		self.x += dt * random.uniform(0, vitesse_lim)
 		self.y += dt * random.uniform(-2*vitesse_lim, 2*vitesse_lim)
 
@@ -183,6 +190,7 @@ class protein:
 				self.attraction(dt, position_trou, taille_trou, vitesse_max_flux, diametre)
 
 
+
 		# Quand elle sort par le trou, on considere a partir d un moment que elle ne soit plus en contact avec le reste lorsqu
 		# elle sort d un certain perimetre ici on aurait un cercle de rayon diametre
 		if self.y > diametre:
@@ -197,7 +205,7 @@ class protein:
 				if l_pla != False:
 					for i in l_pla:
 						if i.rayon < i.x + self.x:
-							self.y += dt * random.uniform(-100*vitesse_lim,0)
+							self.y = diametre-self.rayon
 
 
 

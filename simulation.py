@@ -8,7 +8,7 @@ from protein import *
 from envir import *
 
 #taille_trou, position_trou, diametre, debut, fin,vitesse_max_flux
-e=envir(500,300,300, 0,gtk.gdk.screen_width(),60)
+e=envir(500,300,300, 0,gtk.gdk.screen_width(),1000)
 # gtk.gdk.screen_height()-100
 
 
