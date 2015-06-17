@@ -190,7 +190,7 @@ class envir:
 			surface.blit(font1.render("%d / %d"%(len(self.dicoProt[z]),self.linit[i]), 1, (0,0,0)), (100*i+20,self.diametre+90))
 			i=i+1
 			for y in self.dicoProt[z]:
-				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,1-y.activation)
+				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,0)
 				#surface.blit(font1.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
 
 
