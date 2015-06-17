@@ -114,9 +114,9 @@ class envir:
 		self.listPlaquetteActivees=[]
 
 
-		self.dicoProt['VeninV']=[]
-		self.dicoCouleur['VeninV']=(19,60,19)
-		self.dicoTaille['VeninV']= 10
+		self.dicoProt['Venin']=[]
+		self.dicoCouleur['Venin']=(19,60,19)
+		self.dicoTaille['Venin']= 10
 
 		if self.venin>0:
 			self.dicoProt['Venin']=[]
@@ -162,7 +162,7 @@ class envir:
 				i.activation=True
 			if self.venin:
 				for i in xrange(40):# nombre completement aleatoire
-					self.dicoProt['VeninV'].append(protein(self.dicoTaille['VeninV'], self.position_trou+random.random()*self.taille_trou, self.diametre-self.dicoTaille['VeninV']-30))
+					self.dicoProt['Venin'].append(protein(self.dicoTaille['Venin'], self.position_trou+random.random()*self.taille_trou, self.diametre-self.dicoTaille['Venin']-30))
 
 
 	#----------------------------------------------------------------------------------------------------
