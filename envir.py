@@ -57,16 +57,16 @@ class envir:
 		self.dicoRel['VIIa']=(1,'TF','VIIa-TF','c',True)
 		self.dicoRel['TF']=(1,'VIIa','VIIa-TF','c',False)
 		self.dicoRel['X']=(1,'VIIa-TF','Xa','p',True)
-		self.dicoRel['VIIa-TF']=(1,'X','Xa','p',False)
+		self.dicoRel['VIIa-TF']=(1,'X','VIIa-TF','p',False)
 		self.dicoRel['prothrombine']=(1,'Xa','thrombine','p',True)
 		#Xa + prothrombine = thrombine
 		#Xa + V = Va
-		self.dicoRel['Xa']=(2,('prothrombine','V'),('thrombine','Va'),'p',True)
+		self.dicoRel['Xa']=(2,('prothrombine','V'),('Xa','Xa'),'p',True)
 		self.dicoRel['V']=(1,'Xa','Va','p',True)
-		self.dicoRel['Va']=(0,'p',True)
+		self.dicoRel['Va']=(1,'thrombine','Va','p',True)
 		self.dicoRel['fibrinogene']=(1,'thrombine','fibrine','p',True)
-		self.dicoRel['thrombine']=(1,'fibrinogene','fibrine','p',True)
-		self.dicoRel['fibrine']=(0,'p',True)
+		self.dicoRel['thrombine']=(1,'fibrinogene','thrombine','p',True)
+		self.dicoRel['fibrine']=(0,'plaquette','fibrine','p',True)
 		self.dicoRel['plaquette']=(0,'p',True)
 
 
@@ -100,9 +100,9 @@ class envir:
 		self.dicoCouleur['Xa']=(0,0,0)
 		self.dicoCouleur['V']=(255,90,0)
 		self.dicoCouleur['Va']=(255,0,90)
-		self.dicoCouleur['fibrinogene']=(0,0,0)
+		self.dicoCouleur['fibrinogene']=(180,160,73)
 		self.dicoCouleur['thrombine']=(184,134,11)
-		self.dicoCouleur['fibrine']=(0,0,0)
+		self.dicoCouleur['fibrine']=(230,210,123)
 		self.dicoCouleur['plaquette']=(155,155,155)
 
 		self.blessure=False
@@ -119,8 +119,6 @@ class envir:
 		self.dicoTaille['Venin']= 10
 
 		if self.venin>0:
-			self.dicoProt['Venin']=[]
-			self.dicoTaille['Venin']= 10
 			if self.venin==1:
 				self.dicoRel['V']=(2,('Xa','Venin'),('Va','Va'),'p',True)
 				self.dicoRel['Venin']=(1,'Va','Venin','p',True)
@@ -137,6 +135,7 @@ class envir:
 	#cree le nombre de proteines indique pour chaque type de proteine
 
 	def prot(self,fibrine,Va,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa):
+		print self.dicoProt.keys()
 		l=[fibrine,Va,0,prothrombine,Xa,plaquette,fibrinogene,thrombine,VIIaTF,V,TF,X,VIIa] #12 elements dans la liste
 		for i,prot in enumerate(self.dicoProt.keys()): #pour chaque type de prot
 			for j in xrange(l[i]): #pour le nb de prot voulu pour ce type de prot
@@ -329,8 +328,7 @@ class envir:
 			self.dicoProt[typeProt].remove(prot) #on enleve du tableau la proteine qui se transforme 
 			#print typeProt,"reagit avec", self.dicoRel[typeProt][1] #X
 			#print "dicoPb",self.dicoProt[self.dicoRel[typeProt][1]]
-			self.dicoProt[self.dicoRel[typeProt][1]].remove(prot2)  #on enleve l'autre prot qui reagit du tableau
-
+			
 		if self.dicoRel[typeProt][0]>1: #si peut reagir ac plus d'une proteine
 			#print "2"
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][0]]: #on cherche si prot ac qui reagit est son premier ou deuxieme reactif
@@ -341,8 +339,7 @@ class envir:
 
 				self.dicoProt[self.dicoRel[typeProt][2][0]].append(p) #on ajoute la nouvelle prot au bon tableau
 
-				self.dicoProt[self.dicoRel[typeProt][1][0]].remove(prot2) 
-
+				
 			if prot2 in self.dicoProt[self.dicoRel[typeProt][1][1]]:
 				p = protein(self.dicoTaille[self.dicoRel[typeProt][1][1]], (prot.x+prot2.x)/2, (prot.y+prot2.y)/2)
 
@@ -350,8 +347,6 @@ class envir:
 				if self.dicoRel[self.dicoRel[typeProt][2][1]][-1]==False:
 					p.activation=True
 				self.dicoProt[self.dicoRel[typeProt][2][1]].append(p)  #on ajoute la nouvelle prot au bon tableau
-
-				self.dicoProt[self.dicoRel[typeProt][1][1]].remove(prot2) 
 			self.dicoProt[typeProt].remove(prot) 
 #		self.dicoRel['V']=(1,'Xa','Va','p',True)
 #		self.dicoRel['plaquette']=(0,'p',True)
@@ -385,6 +380,9 @@ class envir:
 		deffont = pygame.font.SysFont(pygame.font.get_default_font(),20)
 		font2 = pygame.font.SysFont(pygame.font.get_default_font(),15)
 		loop=True
+		ent=-1
+		f=open("fibrine0.txt","w")
+		f.write("t\tsort\n")
 		while loop: #loop= mantenir ouverte la fenetre
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT: 
@@ -401,11 +399,16 @@ class envir:
 				once=True
 			self.printvaisseau(screen)
 			self.printallprotein(screen,deffont,font2) #on dessine chaque prot selon le type de prot
-
+			if ent!=int(self.temps):
+				ent=int(self.temps)
+				f.write("%d\t%d\n"%(ent,len(self.dicoProt['fibrine'])))
 			pygame.display.set_caption(text)
 			pygame.display.flip()
 			if not self.blessure:
 				self.moveAll_avant() #on fait bouger toutes les prot
 			else:
 				self.moveAll()
+			if self.temps>60:
+				f.close()
+				loop=False
 			#print len(self.dicoProt['TF'])
