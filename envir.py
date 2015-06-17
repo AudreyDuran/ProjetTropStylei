@@ -114,9 +114,9 @@ class envir:
 		self.listPlaquetteActivees=[]
 
 
-		self.dicoProt['VeninV']=[]
-		self.dicoCouleur['VeninV']=(19,60,19)
-		self.dicoTaille['VeninV']= 10
+		self.dicoProt['Venin']=[]
+		self.dicoCouleur['Venin']=(19,60,19)
+		self.dicoTaille['Venin']= 10
 
 		if self.venin>0:
 			self.dicoProt['Venin']=[]
@@ -162,7 +162,7 @@ class envir:
 				i.activation=True
 			if self.venin:
 				for i in xrange(40):# nombre completement aleatoire
-					self.dicoProt['VeninV'].append(protein(self.dicoTaille['VeninV'], self.position_trou+random.random()*self.taille_trou, self.diametre-self.dicoTaille['VeninV']-30))
+					self.dicoProt['Venin'].append(protein(self.dicoTaille['Venin'], self.position_trou+random.random()*self.taille_trou, self.diametre-self.dicoTaille['Venin']-30))
 
 
 	#----------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ class envir:
 			surface.blit(font1.render("%d / %d"%(len(self.dicoProt[z]),self.linit[i]), 1, (0,0,0)), (100*i+20,self.diametre+90))
 			i=i+1
 			for y in self.dicoProt[z]:
-				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,1-y.activation)
+				pygame.draw.circle(surface,self.dicoCouleur[z],(int(y.x),int(y.y+20)), y.rayon,0)
 				#surface.blit(font1.render(z, 1, self.dicoCouleur[z]), (int(y.x),int(y.y+20)))
 
 
