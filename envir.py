@@ -58,7 +58,7 @@ class envir:
 		self.dicoRel['TF']=(1,'VIIa','VIIa-TF','c',False)
 		self.dicoRel['X']=(1,'VIIa-TF','Xa','p',True)
 		self.dicoRel['VIIa-TF']=(1,'X','VIIa-TF','p',False)
-		self.dicoRel['prothrombine']=(1,'Xa','thrombine','p',True)
+		self.dicoRel['prothrombine']=(2,('Xa','Va'),('thrombine','thrombine'),'p',True)
 		#Xa + prothrombine = thrombine
 		#Xa + V = Va
 		self.dicoRel['Xa']=(2,('prothrombine','V'),('Xa','Xa'),'p',True)
