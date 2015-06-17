@@ -59,7 +59,7 @@ class protein:
 		self.compte += 1
 
 		if self.compte > tps_lim:
-			self.activation=True
+			self.activation=False
 			self.tps +=1
 
 			if self.tps > tsp:
@@ -144,7 +144,7 @@ class protein:
 			
 			
 
-
+	# Pas le temps mais le mettre dans envir (sinon cela rame)
 	def fin_coagulation(self, l_pla):
 
 		if l_pla!=False:
@@ -172,9 +172,9 @@ class protein:
 	# vitesse max flux est la vitesse du flux qui part vers la blessure
 	def move(self, dt, vitesse_lim, position_trou, taille_trou, debut, fin, diametre, vitesse_max_flux, l_pla=False):
 		
-		# if self.fin_coagulation(l_pla) == True:
-		# 	self.move_avant(dt, vitesse_lim, debut, fin, diametre)
-		# 	return 0
+		if len(l_pla) >150:
+			self.move_avant(dt, vitesse_lim, debut, fin, diametre)
+			return 0
 
 
 
