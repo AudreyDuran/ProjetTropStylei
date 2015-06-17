@@ -144,8 +144,9 @@ class protein:
 			
 			
 
-	# Pas le temps mais le mettre dans envir (sinon cela rame)
-	def fin_coagulation(self, l_pla):
+	# Pas le temps mais le mettre dans envir (sinon cela rame) 
+	# sert a arreter le move et mettre move_avant si toutes le caillot est formé sur la blessure
+	def fin_coagulation(self, l_pla, position_trou, taille_trou):
 
 		if l_pla!=False:
 			l = [[i.x-i.rayon, i.x+i.rayon] for i in l_pla]
@@ -161,7 +162,7 @@ class protein:
 				else:
 					i+=1
 
-			if len(l) == 1:
+			if len(l) == 1 and l[0][0]<position_trou and l[0][1]>taille_trou+position_trou:
 				return True
 
 			else: 
